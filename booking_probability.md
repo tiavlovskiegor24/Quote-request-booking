@@ -47,7 +47,7 @@ $$
 R_{\text{market}}.
 $$
 
-There is a **monotone map**:
+There is a one-to-one **monotone map**:
 
 $$
 m : Q_{\text{market}} \to R_{\text{market}}
@@ -61,14 +61,47 @@ If one request is less sensitive and sits higher in the order, the rate assigned
 
 ---
 
-## 3. Quantile Embeddings: Putting Everything on $[0,1]$
+## 3. Acceptance/Rejection as a Boolean Feasibility Relation
+Because requests and rates share the same ordering, any quote request can be paired with any candidate market rate and classified: either the offered rate sits below that request’s clearing level and is accepted, or it exceeds it and is rejected.
+Acceptance occurs when the offered rate does not exceed the clearing rate of the request. 
+$$
+r \le m(q).
+$$
 
-To compare requests and rates cleanly, start with a generic quantile embedding on any finite total order $P$. The same averaging reappears in section 9 when we integrate the feasibility relation. The feasibility relation $\mathrm{hom}_P : P^{op}\times P \to \mathbf{Bool}$ is just the order relation itself, obtained from the unit monotone map $P \to \mathbf{Bool}^P$ that sends each $p$ to its principal downset; it returns $\mathbf{true}$ exactly when $p' \le p$.
+Formally, treat this as a feasibility relation: it is antitone in the rate (higher rates are harder to accept) and monotone in the request (less-sensitive customers accept more). Using the opposite order on rates makes the relation monotone in both arguments:
 
+$$
+F : R_{\text{market}}^{op} \times Q_{\text{market}}
+\to \mathbf{Bool},
+\qquad
+F(r,q) = (r\le m(q)).
+$$
+
+This is the fundamental decision rule; rejection happens exactly when $F(r,q)$ is false. 
+
+---
+
+## 4. Quantile Embeddings: Putting Everything on $[0,1]$
+
+To compare requests and rates cleanly, embed any finite total order $P$ into $[0,1]$ by turning each element into its cumulative rank: count how many elements are at or below it, then divide by $|P|$.
+
+A more explicit form of that embedding:
+- Begin with the canonical feasibility relation $\mathrm{hom}_P : P^{op}\times P \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_P(p',p) = \mathbf{true}$ exactly when $p'\le p$.
+
+- Curry it in the first argument: fix $p$ and read $\mathrm{hom}_P(\,\cdot\,,p)$ as an ordinary function $P \to \mathbf{Bool}$—this is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow p$ (all elements $\le p$), written $\chi_{\downarrow p}(p') = \mathrm{hom}_P(p',p)$.
+
+- Average those indicators uniformly over all $p' \in P$: sum the Boolean values (1 when $p' \le p$, 0 otherwise) and divide by $|P|$. This produces the quantile embedding below and is the same averaging used later when integrating feasibility relations in section 9.2:
 $$
 \phi_P(p)
 = \frac{1}{|P|}
-\sum_{p' \in P} \mathrm{hom}_P(p', p)
+\sum_{p' \in P} \chi_{\downarrow p}(p')
+= \frac{1}{|P|}
+\sum_{p' \in P} \mathrm{hom}_P(p',p).
+$$
+Here the average simply measures the fraction of the set that lies in $\downarrow p$: each indicator contributes 1 when $p'$ is below $p$ and 0 otherwise, so the mean over all $p'$ gives the cumulative rank of $p$.
+
+$$
+\phi_P(p)
 = \frac{|\{p' \in P : p' \le p\}|}{|P|}.
 $$
 ### Request quantiles
@@ -105,61 +138,34 @@ $$
 - They live on the same axis.  
 - Higher quantile = higher willingness to pay / higher offered rate.
 
----
-
-## 4. Acceptance/Rejection as a Boolean Feasibility Relation
-
-Acceptance occurs when the rate quantile does not exceed the request quantile. Denote the rate quantile by $r \in [0,1]$ (formerly $\phi_R(\cdot)$) and the request quantile by $q \in [0,1]$ (formerly $\phi_Q(\cdot)$); then
-$$
-r \le q.
-$$
-
-Formally:
-
-$$
-F : R_{\text{market}}^{op} \times Q_{\text{market}}
-\to \mathbf{Bool},
-\qquad
-F(r,q) = (r\le q).
-$$
-
-This is the fundamental decision rule; rejection happens exactly when $F(r,q)$ is false. From here on we work entirely in quantile coordinates on $[0,1]$, reusing $r$ and $q$ to denote rate and request quantiles. To recover physical values, apply the inverses $\phi_R^{-1}$ or $\phi_Q^{-1}$ when needed.
+From here on we work entirely in quantile coordinates on $[0,1]$, reusing $r$ and $q$ to denote rate and request quantiles. To recover physical values, apply the inverses $\phi_R^{-1}$ or $\phi_Q^{-1}$ when needed.
 
 ---
 
-## 5. The Market Rejection Curve
+## 6. Closures, Structural WTP, and the Rejection Adjunction
 
-Let $r \in [0,1]$ be the rate quantile. Then:
+### Closures, the nucleus, and structural WTP
 
+In quantile space, the market feasibility relation becomes the indicator of the diagonal order:
 $$
-\rho_{\text{market}}(r)
-= \Pr(q < r)
-= r.
+F(r,q) = \mathbf{true} \;\Longleftrightarrow\; r \le q.
 $$
-
-![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
-
-### Interpretation
-
-- If a rate sits at quantile 0.3, then 30% of requests sit below it → they reject.  
-- The market rejection curve is a straight line with slope 1 (the booking curve is its complement, $1-r$).  
-- In the figure, the diagonal $x=y$ splits the unit square: points below it (blue-to-red side) are rejections ($q<r$), points above it are acceptances.
-
----
-
-## 6. Closures, the Nucleus, and Structural WTP
-
-The feasibility relation induces closure operators:
+From this single relation we obtain two dual closure operators that summarize the same accept/reject geometry from opposite ends:
+- The **upper closure** gathers all rates that a request would accept.
+- The **lower closure** gathers all requests that would accept a rate.
+Each is a monotone endomap on $[0,1]$; they are the two sides of a Galois connection from which both willingness-to-pay (WTP) and rejection thresholds will be derived as conjugate scalar maps.
 
 ### Upper closure
 
 $$
+F^\sharp : [0,1] \to \mathcal{P}([0,1]), \qquad
 F^\sharp(q)=\{ r \in [0,1] : r \le q \}.
 $$
 
 ### Lower closure
 
 $$
+F_\flat : [0,1] \to \mathcal{P}([0,1]), \qquad
 F_\flat(r)=\{ q \in [0,1] : r \le q \}.
 $$
 
@@ -168,14 +174,47 @@ $$
 $$
 \mathrm{Nuc}(F)=\{(A,B): A=F^\sharp(B),\, B=F_\flat(A)\}.
 $$
-
-In total orders, each downward-closed set has a maximum, giving the **structural willingness-to-pay**:
-
-In quantile coordinates, $F^\sharp(q)$ is the interval $[0,q]$, so the willingness-to-pay quantile is just
+Elements of the nucleus are pairs of closed sets that are "as tight as possible" with respect to the feasibility relation: $A$ is exactly the set of rates supported by $B$, and $B$ is exactly the set of requests supporting $A$. In our total-order setting every nucleus element has the form
 $$
-r^*(q)=\max F^\sharp(q)=q.
+(A,B)=([0,q],[r,1])
 $$
-To recover the physical rate, apply $\phi_R^{-1}(q)$; on the unit square this is the identity along the diagonal.
+for some $r\le q$, i.e. a downward-closed interval together with its matching upward-closed interval. The diagonal cases with $r=q$ describe the one-dimensional "spine" of the nucleus, corresponding to points on the market diagonal.
+
+In total orders, each downward-closed set has a maximum and each upward-closed set has a minimum. This lets us collapse the set-valued closures into **two conjugate extremal maps**
+$$
+r^* : [0,1] \to [0,1], \quad r^*(q)\;:=\;\max F^\sharp(q),
+\qquad
+q^* : [0,1] \to [0,1], \quad q^*(r)\;:=\;\min F_\flat(r),
+$$
+where $r^*(q)$ is the largest rate still acceptable for request quantile $q$ (structural WTP), and $q^*(r)$ is the least request quantile that will still accept rate quantile $r$ (a structural booking threshold). These two maps are conjugate with respect to the feasibility relation: for all $r,q\in[0,1]$,
+$$
+r \le r^*(q)
+\;\Longleftrightarrow\;
+F(r,q)
+\;\Longleftrightarrow\;
+q^*(r) \le q.
+$$
+Thus $r^*$ and $q^*$ form a Galois connection on $[0,1]$, and the nucleus $\mathrm{Nuc}(F)$ is exactly the graph of the induced **Galois correspondence** between closed sets. Equivalently, each point on the diagonal nucleus can be parameterized either by $q \mapsto (F^\sharp(q),F_\flat(r^*(q)))$ or by $r \mapsto (F^\sharp(q^*(r)),F_\flat(r))$, so along the nucleus the two extremal maps are carried into one another isomorphically—they are just two coordinate views of the same family of nucleus pairs. In particular, on the image of $r^*$ (equivalently of $q^*$) the maps compose to the identity:
+$$
+q^*(r^*(q)) = q,
+\qquad
+r^*(q^*(r)) = r,
+$$
+so moving from requests to rates via $r^*$ and back via $q^*$ (or vice versa) returns you to the same point on the diagonal. In other words, diagonal points satisfy
+$$
+r^*(q)=q,
+\qquad
+q^*(r)=r,
+$$
+so they are precisely the fixed points of the adjunction (equivalently, of the corresponding closure–kernel pair) picked out by the nucleus.
+
+In quantile coordinates, $F^\sharp(q)$ is the interval $[0,q]$ and $F_\flat(r)$ is the interval $[r,1]$, so the extremal maps simplify to
+$$
+r^*(q)=\max F^\sharp(q)=q,
+\qquad
+q^*(r)=\min F_\flat(r)=r.
+$$
+To recover physical values, apply the inverse quantile maps: the structural WTP rate is $\phi_R^{-1}(r^*(q))$, and the structural booking threshold request at rate $r$ is $\phi_Q^{-1}(q^*(r))$. On the unit square both are simply the identity along the diagonal.
 
 ### Geometric meaning of WTP
 
@@ -183,8 +222,36 @@ In the $(\phi_R, \phi_Q)$ unit square:
 ![WTP for a given request quantile](figures/wtp_for_q.jpg)
 - Each request corresponds to a horizontal line at its quantile $q$.
 - Feasible rates sit on or below that line (to the left of the intersection).
-- The WTP is the intersection with the diagonal $x=y$; projecting down gives $r^*(q)$.
+- The WTP $r^*(q)$ is the intersection with the diagonal $x=y$; projecting down gives the maximum feasible rate quantile.
+- Dually, for a fixed rate quantile $r$, the booking threshold $q^*(r)$ is the intersection of the vertical line at $r$ with the diagonal; projecting left gives the least request quantile that will accept that rate.
 - Moving the horizontal line upward (higher $q$) shifts the WTP rightward (higher rate quantile).
+
+### Conjugate thresholds and the market rejection curve
+
+The rejection rate answers the dual question: "At this posted rate, what share of the market walks away?" The lower closure $F_\flat(r) = [r,1]$ tells us that all accepting requests lie at or above the booking threshold $q^*(r)$; the rejecting requests are the ones *below* that threshold. With a uniform distribution of request quantiles on $[0,1]$, the market rejection curve is exactly the probability mass below $q^*(r)$:
+$$
+\rho_{\text{market}} : [0,1] \to [0,1], \quad
+\rho_{\text{market}}(r)
+= \Pr(q < q^*(r))
+= q^*(r).
+$$
+In our fully symmetric market quantile normalization we have $q^*(r)=r$, so
+$$
+\rho_{\text{market}}(r)=r.
+$$
+Because $r^*$ and $q^*$ are Galois conjugates, the underlying order structure satisfies
+$$
+r \le r^*(q)
+\;\Longleftrightarrow\;
+q^*(r) \le q,
+$$
+and the rejection curve $\rho_{\text{market}}$ is just the probabilistic shadow of the threshold map $q^*$ under the uniform measure on requests.
+
+![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
+
+- If a rate sits at quantile 0.3, then 30% of requests sit below it → they reject.  
+- The market rejection curve is a straight line with slope 1 (the booking curve is its complement, $1-r$).  
+- In the figure, the diagonal $x=y$ splits the unit square: points below it (blue-to-red side) are rejections ($q<r$), points above it are acceptances.
 
 ---
 
