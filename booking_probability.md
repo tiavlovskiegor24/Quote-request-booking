@@ -1,12 +1,12 @@
-# An Order-Theoretic View of Quote Booking in Container Shipping
+# An Order-Theoretic View of Quote Rejection in Container Shipping
 
-Container-shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy booking outcomes. But once we assume quote requests can be **totally ordered** and that feasible rates respect the same order, everything suddenly becomes simple and structured.
+Container-shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy acceptance/rejection outcomes. But once we assume quote requests can be **totally ordered** and that feasible rates respect the same order, everything suddenly becomes simple and structured.
 
-Once we embed both requests and rates into quantiles, the entire booking logic becomes a simple comparison of numbers in $[0,1]$. From that starting point, willingness-to-pay, booking curves, and suggested selling rates all emerge naturally.
+Once we embed both requests and rates into quantiles, the entire accept/reject logic becomes a simple comparison of numbers in $[0,1]$. From that starting point, willingness-to-pay, rejection (and booking) curves, and suggested selling rates all emerge naturally.
 
 This post explains that structure step by step, building toward one key object:
 
-> **The carrier-specific booking probability curve**,  
+> **The carrier-specific rejection probability curve** (the complement of the booking curve),  
 > which is foundational for computing the **Suggested Selling Rate (SSR)**.
 
 ---
@@ -63,12 +63,20 @@ If one request is less sensitive and sits higher in the order, the rate assigned
 
 ## 3. Quantile Embeddings: Putting Everything on $[0,1]$
 
-To compare requests and rates cleanly, we embed them into quantiles.
-
-### Request quantiles
+To compare requests and rates cleanly, start with a generic quantile embedding on any finite total order $P$. The same averaging reappears in section 9 when we integrate the feasibility relation. The feasibility relation $\mathrm{hom}_P : P^{op}\times P \to \mathbf{Bool}$ is just the order relation itself, obtained from the unit monotone map $P \to \mathbf{Bool}^P$ that sends each $p$ to its principal downset; it returns $\mathbf{true}$ exactly when $p' \le p$.
 
 $$
-\phi_Q(q_{(k)}) = \frac{k}{N}.
+\phi_P(p)
+= \frac{1}{|P|}
+\sum_{p' \in P} \mathrm{hom}_P(p', p)
+= \frac{|\{p' \in P : p' \le p\}|}{|P|}.
+$$
+### Request quantiles
+Applied to market requests (take $P = Q_{\text{market}}$):
+
+$$
+\phi_Q(q) = \frac{|\{q' \in Q_{\text{market}} : q' \le q\}|}{|Q_{\text{market}}|}
+= \frac{k}{N} \text{ for } q = q_{(k)}.
 $$
 
 Every request gets a rank between 0 and 1.
@@ -79,7 +87,13 @@ $$
 \phi_R : R_{\text{market}} \to [0,1].
 $$
 
-Because $m$ is monotone:
+For rates, the same construction with $P = R_{\text{market}}$ gives:
+
+$$
+\phi_R(r) = \frac{|\{r' \in R_{\text{market}} : r' \le r\}|}{|R_{\text{market}}|}.
+$$
+
+Because $m$ is monotone and preserves ranks, $\phi_R \circ m$ and $\phi_Q$ coincide, so $Q_{\text{market}}$ and $R_{\text{market}}$ are isomorphic as total orders via the shared quantile axis.
 
 $$
 \phi_R(m(q_{(k)})) = \phi_Q(q_{(k)}).
@@ -93,12 +107,11 @@ $$
 
 ---
 
-## 4. Booking as a Boolean Feasibility Relation
+## 4. Acceptance/Rejection as a Boolean Feasibility Relation
 
-Booking occurs when:
-
+Acceptance occurs when the rate quantile does not exceed the request quantile. Denote the rate quantile by $r \in [0,1]$ (formerly $\phi_R(\cdot)$) and the request quantile by $q \in [0,1]$ (formerly $\phi_Q(\cdot)$); then
 $$
-\phi_R(r) \le \phi_Q(q).
+r \le q.
 $$
 
 Formally:
@@ -107,35 +120,30 @@ $$
 F : R_{\text{market}}^{op} \times Q_{\text{market}}
 \to \mathbf{Bool},
 \qquad
-F(r,q) = (\phi_R(r)\le\phi_Q(q)).
+F(r,q) = (r\le q).
 $$
 
-This is the fundamental decision rule.
+This is the fundamental decision rule; rejection happens exactly when $F(r,q)$ is false. From here on we work entirely in quantile coordinates on $[0,1]$, reusing $r$ and $q$ to denote rate and request quantiles. To recover physical values, apply the inverses $\phi_R^{-1}$ or $\phi_Q^{-1}$ when needed.
 
 ---
 
-## 5. The Market Booking Curve
+## 5. The Market Rejection Curve
 
-Let:
-
-$$
-x = \phi_R(r).
-$$
-
-Then:
+Let $r \in [0,1]$ be the rate quantile. Then:
 
 $$
-\beta_{\text{market}}(r)
-= \Pr(\phi_Q(q) \ge x)
-= 1 - x
-= 1 - \phi_R(r).
+\rho_{\text{market}}(r)
+= \Pr(q < r)
+= r.
 $$
+
+![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
 
 ### Interpretation
 
-- If rate $r$ sits at quantile 0.3,  
-  then 70% of requests sit above it → they book.  
-- The market booking curve is a straight line.
+- If a rate sits at quantile 0.3, then 30% of requests sit below it → they reject.  
+- The market rejection curve is a straight line with slope 1 (the booking curve is its complement, $1-r$).  
+- In the figure, the diagonal $x=y$ splits the unit square: points below it (blue-to-red side) are rejections ($q<r$), points above it are acceptances.
 
 ---
 
@@ -146,13 +154,13 @@ The feasibility relation induces closure operators:
 ### Upper closure
 
 $$
-F^\sharp(q)=\{ r : F(r,q)=\mathbf{true} \}.
+F^\sharp(q)=\{ r \in [0,1] : r \le q \}.
 $$
 
 ### Lower closure
 
 $$
-F_\flat(r)=\{ q : F(r,q)=\mathbf{true} \}.
+F_\flat(r)=\{ q \in [0,1] : r \le q \}.
 $$
 
 ### The nucleus
@@ -163,19 +171,20 @@ $$
 
 In total orders, each downward-closed set has a maximum, giving the **structural willingness-to-pay**:
 
+In quantile coordinates, $F^\sharp(q)$ is the interval $[0,q]$, so the willingness-to-pay quantile is just
 $$
-r^*(q)=\max F^\sharp(q)
-      = \sup\{r : \phi_R(r) \le \phi_Q(q)\}.
+r^*(q)=\max F^\sharp(q)=q.
 $$
+To recover the physical rate, apply $\phi_R^{-1}(q)$; on the unit square this is the identity along the diagonal.
 
 ### Geometric meaning of WTP
 
 In the $(\phi_R, \phi_Q)$ unit square:
-
-- Each request is a **horizontal line** at height $\phi_Q(q)$.  
-- Feasible rates are all rate quantiles **to the left** of that height.  
-- The WTP is the point where the horizontal line meets the diagonal $x = y$.  
-- Project that point down to the rate axis → that is $r^*(q)$.
+![WTP for a given request quantile](figures/wtp_for_q.jpg)
+- Each request corresponds to a horizontal line at its quantile $q$.
+- Feasible rates sit on or below that line (to the left of the intersection).
+- The WTP is the intersection with the diagonal $x=y$; projecting down gives $r^*(q)$.
+- Moving the horizontal line upward (higher $q$) shifts the WTP rightward (higher rate quantile).
 
 ---
 
@@ -201,7 +210,7 @@ $$
 \phi_{\text{carrier}}(q)
 =
 \frac{
-|\{q' \in Q_{\text{carrier}} : m(j(q')) \le m(j(q))\}|
+|\{q' \in Q_{\text{carrier}} : q' \le q\}|
 }{
 |Q_{\text{carrier}}|
 }.
@@ -209,69 +218,79 @@ $$
 
 This expresses the carrier’s internal demand distribution on the same $[0,1]$ quantile axis.
 
+![Carrier subset pulled back into market quantiles](figures/subset_precomposition.jpg)
+- The inclusion $j$ pulls carrier requests into market order; composing with $m$ places them on the shared quantile line.
+- The carrier distribution typically sits at different quantiles than the market, reflecting its mix.
+- With $\phi_{\text{carrier}}$ we compare carrier demand and market rates on the same $[0,1]$ axis.
+
+![Carrier feasibility relation in quantile space](figures/carrier_feasibility_relation.jpg)
+- Pulling back the market feasibility along $j$ and $m$ smooths the sharp diagonal into the carrier’s own contour.
+- The boundary shifts off $x=y$ because the carrier sees a different mix; acceptance at a given rate quantile can be above or below market.
+- The band still monotone-separates accept/reject regions, defining the carrier’s feasibility frontier.
 ---
 
-## 8. Why We First Need the Carrier Booking Curve to Define SSR
+## 8. Why We First Need the Carrier Rejection Curve to Define SSR
 
-The carrier-specific booking curve is:
+The carrier-specific rejection curve is:
 
 $$
-\beta_{\text{carrier}}(r)
+\rho_{\text{carrier}}(r)
 =
-\Pr(\text{booking at rate } r \mid q\in Q_{\text{carrier}}).
+\Pr(\text{rejection at rate } r \mid q\in Q_{\text{carrier}})
+= 1 - \Pr(\text{booking at rate } r \mid q\in Q_{\text{carrier}}).
 $$
 
 Each carrier sees a **non-uniform slice** of the market →  
-each has its **own** booking curve.
+each has its **own** rejection curve (and thus its own booking curve by complement).
 
 ### SSR is chosen *from* this curve
 
 Examples:
 
-- volume-oriented carriers → choose large $\beta_{\text{carrier}}(r)$,  
-- yield-oriented carriers → maximize $r \cdot \beta_{\text{carrier}}(r)$,  
-- balanced strategies → choose quantile-based levels.
+- volume-oriented carriers → target small $\rho_{\text{carrier}}(r)$ (high acceptance),  
+- yield-oriented carriers → maximize $r \cdot (1-\rho_{\text{carrier}}(r))$,  
+- balanced strategies → choose quantile-based rejection levels.
 
 Thus:
 
-> **To define SSR, we must first derive $\beta_{\text{carrier}}(r)$.**
+> **To define SSR, we must first derive $\rho_{\text{carrier}}(r)$.**
 
 ---
 
-## 9. Structural Derivation of the Carrier Booking Curve
+## 9. Structural Derivation of the Carrier Rejection Curve
 
 Two structural paths:
 
 - **Approach A:** via willingness-to-pay  
 - **Approach B:** via pullback → curry → average  
 
-Both produce the same $\beta_{\text{carrier}}(r)$.
+Both produce the same $\rho_{\text{carrier}}(r)$.
 
 ---
 
 ## 9.1 Approach A — Via Carrier Willingness-to-Pay
 
-The market WTP function is:
+The market WTP function in quantile space is simply:
 
 $$
-r^*(q)=\max\{r : \phi_R(r) \le \phi_Q(q)\}.
+r^*(q)=q.
 $$
 
 Restrict to the carrier:
 
 $$
-r^*_{\text{carrier}} = r^* \circ j.
+r^*_{\text{carrier}}(q) = r^*(j(q)) = \text{market quantile of } j(q).
 $$
 
-This yields each carrier customer's **maximum feasible rate**.
+This yields each carrier customer's **maximum feasible rate**; to recover the physical rate, apply $\phi_R^{-1}(r^*_{\text{carrier}}(q))$.
 
-### Constructing the carrier booking curve
+### Constructing the carrier rejection curve
 
 $$
-\beta_{\text{carrier}}(r)
+\rho_{\text{carrier}}(r)
 =
 \frac{
-|\{ q \in Q_{\text{carrier}} : r \le r^*_{\text{carrier}}(q) \}|
+|\{ q \in Q_{\text{carrier}} : r > r^*_{\text{carrier}}(q) \}|
 }{
 |Q_{\text{carrier}}|
 }.
@@ -280,10 +299,9 @@ $$
 ### Quantile expression
 
 $$
-\beta_{\text{carrier}}(r)=1-\phi_{\text{carrier}}(q_r),
-\qquad
-\phi_R(r)=\phi_Q(q_r).
+\rho_{\text{carrier}}(r)=\phi_{\text{carrier}}(q_r),
 $$
+where $q_r$ is the market request at quantile $r$ (equivalently, the point on the diagonal with request quantile $q=r$).
 
 ---
 
@@ -304,15 +322,15 @@ $$
 ### Step 3 — Average
 
 $$
-\beta_{\text{carrier}}(r)
+\rho_{\text{carrier}}(r)
 =
 \frac{1}{|Q_{\text{carrier}}|}
-\sum_{q\in Q_{\text{carrier}}} \chi_r(q).
+\sum_{q\in Q_{\text{carrier}}} (1-\chi_r(q)).
 $$
 
 ### Why this matters
 
-- Works directly with the feasibility relation  
+- Works directly with the feasibility relation (booking = $\chi_r$, rejection = $1-\chi_r$)  
 - Natural for estimation  
 - Equivalent to WTP approach in total orders
 
@@ -326,7 +344,7 @@ $$
 (r_i, q_i, y_i),\qquad y_i\in\{0,1\}.
 $$
 
-Two behavioral assumptions:
+Here $y_i=1$ means a booking (so $1-y_i$ is a rejection indicator). Two behavioral assumptions:
 
 ### Targeted (WTP-aligned) pricing
 
@@ -335,10 +353,10 @@ $r_i \approx r^*(q_i)$.
 ### Random-rate pricing
 
 $$
-y_i\sim \mathrm{Bernoulli}(F(r_i,q_i)).
+y_i\sim \mathrm{Bernoulli}(q_i \ge r_i).
 $$
 
-Each produces a different estimator $\widehat{\beta}_{\text{carrier}}(r)$.
+Each produces a different estimator $\widehat{\rho}_{\text{carrier}}(r)=1-\widehat{\beta}_{\text{carrier}}(r)$.
 
 ---
 
@@ -346,11 +364,11 @@ Each produces a different estimator $\widehat{\beta}_{\text{carrier}}(r)$.
 
 Under the total-order assumption:
 
-- booking = comparing quantiles  
+- accept/reject = comparing quantiles  
 - WTP = maximum feasible rate  
 - carrier demand = market subset  
-- carrier booking curve = tail probability  
-- **SSR = a chosen point on that curve**
+- carrier rejection curve = head probability (booking is its complement)  
+- **SSR = a chosen point balancing rate and rejection**
 
 This framework generalizes to multidimensional request spaces and non-total orders.
 
