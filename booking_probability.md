@@ -1,4 +1,4 @@
-# An Order-Theoretic View of Quote Rejection in Container Shipping
+# A Structured approach to Quotation pricing in Container Shipping
 
 Container-shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy acceptance/rejection outcomes. But once we assume quote requests can be **totally ordered** and that feasible rates respect the same order, everything suddenly becomes simple and structured.
 
