@@ -1,10 +1,8 @@
 # A Structured approach to Quotation pricing in Container Shipping
 
-<!-- TODO rewrite this to avoid overpromising, 
-rather the point if exercise is to introduce structured thinking to specific problem solving at hand -->
-Container-shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy acceptance/rejection outcomes. But once we assume quote requests can be **totally ordered** and that feasible rates respect the same order, everything suddenly becomes simple and structured.
-
-Once we embed both requests and rates into quantiles, the entire accept/reject logic becomes a simple comparison of numbers in $[0,1]$. From that starting point, willingness-to-pay, rejection (and booking) curves, and suggested selling rates all emerge naturally.
+Container‑shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy acceptance/rejection outcomes. This note does not attempt to solve pricing end‑to‑end, but instead isolates and studies a simple mathematical core of the problem: how quote requests and candidate rates interact through accept/reject decisions.  
+  
+We treat this core as a small case study in applied category theory and order theory. The central object is a feasibility relation that records, for each request–rate pair, whether the quote would be accepted or rejected, and we use it to introduce basic notions such as enriched profunctors, nuclei, and Galois adjunctions in a concrete setting. Familiar constructs—willingness‑to‑pay curves, rejection and booking curves, and suggested selling rates—then appear as derived objects of this single relation once we impose a bit of structure.
 
 ---
 
@@ -196,31 +194,69 @@ where $q^*(r)$ is the least quotation request quantile that will still accept ra
 - The market rejection curve is a straight line with slope 1 (the booking curve is its complement, $1-r$).  
 
 ### The nucleus
-<!-- TODO Please edit the inline symbols -->
-The **nucleus** of feasibility relation $F$ is defined as subsets from phi_R^{op} x phi_Q such as
-<!-- TODO Please add which sets A and B belong to -->
+
+Working in quantile coordinates, we view the feasibility relation as a $\mathbf{Bool}$‑enriched profunctor
 $$
-\mathrm{Nuc}(F)=\{(A,B): A=F^\sharp(B),\, B=F_\flat(A)\}.
+F : [0,1]_R^{op} \times [0,1]_Q \to \mathbf{Bool},
+$$
+where we implicitly identify market rates and requests with their quantiles via $\phi_R$ and $\phi_Q$. The **nucleus** of $F$ is the subset
+$$
+\mathrm{Nuc}(F) \;\subseteq\; \mathcal{P}([0,1]_R) \times \mathcal{P}([0,1]_Q)
+$$
+of pairs $(A,B)$ of rate‑ and request‑quantile sets defined by
+$$
+\mathrm{Nuc}(F)
+=
+\{(A,B) : A = F^\sharp(B),\; B = F_\flat(A)\},
+$$
+with $A \subseteq [0,1]_R$ a set of rate quantiles and $B \subseteq [0,1]_Q$ a set of request quantiles. Such pairs are “as tight as possible” with respect to $F$: $A$ is exactly the set of rates supported by $B$, and $B$ is exactly the set of requests supporting $A$.
+
+The extremal maps introduced above
+$$
+r^* : [0,1]_Q \to [0,1]_R, \quad r^*(q) := \max F^\sharp(\{q\}),
+\qquad
+q^* : [0,1]_R \to [0,1]_Q, \quad q^*(r) := \min F_\flat(\{r\}),
+$$
+extract these interval endpoints. Every nucleus pair can be encoded either by its request endpoint or by its rate endpoint:
+$$
+\mathrm{Nuc}(F)
+=
+\{([0,r^*(q)],[q,1]) : q \in [0,1]_Q\}
+=
+\{([0,r],[q^*(r),1]) : r \in [0,1]_R\}.
+$$
+Equivalently, we may parameterize nucleus pairs just by their extremal points:
+$$
+\mathrm{Nuc}(F)_{\mathrm{ext}}
+=
+\{(r^*(q),q) : q \in [0,1]_Q\}
+=
+\{(r,q^*(r)) : r \in [0,1]_R\}
+=
+\{(r,q) : r = r^*(q),\; q = q^*(r)\}.
 $$
 
-Elements of the nucleus are pairs of closed sets that are "as tight as possible" with respect to the feasibility relation: $A$ is exactly the set of rates supported by $B$, and $B$ is exactly the set of requests supporting $A$. In our total-order setting every nucleus element has the form
+### Adjoint scalar maps, WTP, and rejection
+
+The scalar maps $r^*$ and $q^*$ summarize the nucleus at the level of individual quantiles.
+
+- The **WTP map** $r^* : [0,1]_Q \to [0,1]_R$ answers:
+  > For a given quotation request quantile $q$, what is the largest rate quantile that this request will still accept?
+  
+  Order‑theoretically, the feasible rate set $F^\sharp(q)$ is an initial segment of the rate‑quantile line, and $r^*(q)$ is simply its right endpoint: the supremum rate that remains acceptable for requests at level $q$.
+
+- The **rejection map** $q^* : [0,1]_R \to [0,1]_Q$ answers the dual question:
+  > For a given rate quantile $r$, what is the lowest quotation‑request quantile that will accept this rate?
+  
+  Dually, the feasible request set $F_\flat(r)$ is a terminal segment of the request‑quantile line, and $q^*(r)$ is its left endpoint: the infimum request quantile that still accepts the rate level $r$.
+
+Given a uniform distribution of request quantiles on $[0,1]_Q$, this same map $q^*$ explains why we call it “rejection”: the fraction of requests that reject at rate $r$ is exactly the mass of quantiles below $q^*(r)$, which by uniformity equals $q^*(r)$ itself. In the fully symmetric normalization used here we have $q^*(r)=r$, so the rejection probability at rate quantile $r$ is $r$ and the booking probability is $1-r$.
+
+The pointwise nucleus $\mathrm{Nuc}(F)_{\mathrm{ext}}$ packages the dual correspondence between these two scalar summaries: each pair $(r,q)$ with $r=r^*(q)$ and $q=q^*(r)$ links a structural WTP level $r$ to the rejection quantile $q$ it induces. Composing the WTP map with the rejection map makes this correspondence explicit:
 $$
-(A,B)=([0,r],[q,1])
+q^*(r^*(q)) = q.
 $$
-i.e. a downward-closed interval together with its matching upward-closed interval.
-
-Equivalently we can represent nucleus pairs in terms of their extremal points
-$$
-\mathrm{Nuc}(F)=\{(r,q): r=r^*(q),\, q=q^*(r)\}.
-$$
-
-
-<!-- TODO Please edit and tidy up the below, also we need to com up with subsection name for the following paragraphs, something to do with mutually adjoint subsets -->
-So we get a bijective correspondance between subsets of R and Q, induced by maps r^* and q^*. Just to recap:
-
-map WTP:=r^* answers the question: "For a given quotation request quantile what proportion of all market rate will it accept? In other workds what is the largest acceptable rate quantile?"
-
-The rejection probability map q^* answers the dual question: "At this posted rate, what share of the market walks away? Or equivalently what is the lowest quotation request that will accept"
+In words: at the structural willingness‑to‑pay level of a request at quantile $q$, the market rejection probability is precisely $q$ itself (and the corresponding booking probability is $1-q$). WTP levels and rejection probabilities are thus two views of the same nucleus‑induced correspondence.
 
 
 ---
