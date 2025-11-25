@@ -152,10 +152,11 @@ F : [0,1]^{op} \times [0,1] \to \mathbf{Bool},
 \qquad
 F(r,q) = \mathbf{true} \;\Longleftrightarrow\; r \le q.
 $$
-Following the profunctor-nucleus formalism, this single profunctor induces an adjunction between the powerset lattices $\mathcal{P}([0,1])$ of rates and requests via two dual closure operators:
+This single feasibility relation induces an adjunction between the powerset lattices $\mathcal{P}([0,1])$ of rates and requests via two dual closure operators:
 - The **upper closure** gathers all rates that a family of requests would accept.
 - The **lower closure** gathers all requests that would accept a family of rates.
-Each is a monotone endomap on $\mathcal{P}([0,1])$; they are the two sides of a Galois connection from which both willingness-to-pay (WTP) and rejection thresholds will be derived as adjoint scalar maps.
+
+Each is a monotone endomap on $\mathcal{P}([0,1])$; they are the two sides of a Galois connection from which both willingness-to-pay (WTP) and expected rejection levels will be derived as adjoint scalar maps.
 
 ### Upper closure
 
@@ -165,70 +166,56 @@ F^\sharp(B)=\{ r \in [0,1] : \forall q\in B,\, F(r,q)\}.
 $$
 For a singleton $B=\{q\}$ this reduces to $F^\sharp(\{q\})=\{ r \in [0,1] : r \le q \}$; when no confusion arises, we abbreviate this as $F^\sharp(q)$.
 
+In total orders, each downward-closed set has a maximum and each upward-closed set has a minimum. This lets us collapse the set-valued closure into an **extremal map**:
+$$
+r^* : [0,1] \to [0,1], \quad r^*(q)\;:=\;\max F^\sharp(q)
+$$
+where $r^*(q)$ stands for the largest rate still acceptable for request quantile $q$, or structural Willingless-To-Pay (WTP).
+
+Visualising the $(\phi_R, \phi_Q)$ unit square:
+![WTP for a given request quantile](figures/wtp_for_q.jpg)
+- In the figure, the diagonal $x=y$ splits the unit square: points below it (blue-to-red side) are rejections ($q<r$), points above it are acceptances.
+- Each quotation request corresponds to a horizontal line at its quantile $q$.
+- The WTP $r^*(q)$ is the intersection with the diagonal $x=y$; projecting down gives the maximum feasible rate quantile.
+- Feasible rates $F^\sharp(q)$  sit on or below that line (to the left of the intersection).
+- Moving the horizontal line upward (higher $q$) shifts the WTP rightward (higher rate quantile).
+
 ### Lower closure
 
 $$
 F_\flat : \mathcal{P}([0,1]) \to \mathcal{P}([0,1]), \qquad
 F_\flat(A)=\{ q \in [0,1] : \forall r\in A,\, F(r,q)\}.
 $$
-For a singleton $A=\{r\}$ this gives $F_\flat(\{r\})=\{ q \in [0,1] : r \le q \}$, which we abbreviate as $F_\flat(r)$.
+For a singleton $A=\{r\}$ this gives $F_\flat(\{r\})=\{ q \in [0,1] : r \le q \}$, which we abbreviate as $F_\flat(r)$. We then define:
+$$
+q^* : [0,1] \to [0,1], \quad q^*(r)\;:=\;\min F_\flat(r),
+$$
+where $q^*(r)$ is the least quotation request quantile that will still accept rate quantile $r$. This corresponds to structural rejection probability.
+
+![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
+
+- Dually from Upper closure, for a fixed rate quantile $r$, the booking threshold $q^*(r)$ is the intersection of the vertical line at $r$ with the diagonal; projecting left gives the least request quantile that will accept that rate.
+- If a rate sits at quantile 0.3, then 30% of requests sit below it → they reject.  
+- The market rejection curve is a straight line with slope 1 (the booking curve is its complement, $1-r$).  
 
 ### The nucleus
-
+<!-- TODO Please edit the inline symbols -->
+The **nucleus** of feasibility relation $F$ is defined as subsets from phi_R^{op} x phi_Q such as
+<!-- TODO Please add which sets A and B belong to -->
 $$
 \mathrm{Nuc}(F)=\{(A,B): A=F^\sharp(B),\, B=F_\flat(A)\}.
 $$
+
 Elements of the nucleus are pairs of closed sets that are "as tight as possible" with respect to the feasibility relation: $A$ is exactly the set of rates supported by $B$, and $B$ is exactly the set of requests supporting $A$. In our total-order setting every nucleus element has the form
 $$
-(A,B)=([0,q],[r,1])
+(A,B)=([0,r],[q,1])
 $$
-for some $r\le q$, i.e. a downward-closed interval together with its matching upward-closed interval. The diagonal cases with $r=q$ describe the one-dimensional "spine" of the nucleus, corresponding to points on the market diagonal.
+i.e. a downward-closed interval together with its matching upward-closed interval.
 
-In total orders, each downward-closed set has a maximum and each upward-closed set has a minimum. This lets us collapse the set-valued closures into **two adjoint extremal maps**
+Equivalently we can represent nucleus pairs in terms of their extremal points
 $$
-r^* : [0,1] \to [0,1], \quad r^*(q)\;:=\;\max F^\sharp(q),
-\qquad
-q^* : [0,1] \to [0,1], \quad q^*(r)\;:=\;\min F_\flat(r),
+\mathrm{Nuc}(F)=\{(r,q): r=r^*(q),\, q=q^*(r)\}.
 $$
-where $r^*(q)$ is the largest rate still acceptable for request quantile $q$ (structural WTP), and $q^*(r)$ is the least request quantile that will still accept rate quantile $r$ (a structural booking threshold). These two maps are adjoint with respect to the feasibility relation: for all $r,q\in[0,1]$,
-$$
-r \le r^*(q)
-\;\Longleftrightarrow\;
-F(r,q)
-\;\Longleftrightarrow\;
-q^*(r) \le q.
-$$
-Thus $r^*$ and $q^*$ form a Galois connection on $[0,1]$, and the nucleus $\mathrm{Nuc}(F)$ is exactly the graph of the induced **Galois correspondence** between closed sets. Equivalently, each point on the diagonal nucleus can be parameterized either by $q \mapsto (F^\sharp(q),F_\flat(r^*(q)))$ or by $r \mapsto (F^\sharp(q^*(r)),F_\flat(r))$, so along the nucleus the two extremal maps are carried into one another isomorphically—they are just two coordinate views of the same family of nucleus pairs. In particular, on the image of $r^*$ (equivalently of $q^*$) the maps compose to the identity:
-$$
-q^*(r^*(q)) = q,
-\qquad
-r^*(q^*(r)) = r,
-$$
-so moving from requests to rates via $r^*$ and back via $q^*$ (or vice versa) returns you to the same point on the diagonal. In other words, diagonal points satisfy
-$$
-r^*(q)=q,
-\qquad
-q^*(r)=r,
-$$
-so they are precisely the fixed points of the adjunction (equivalently, of the corresponding closure–kernel pair) picked out by the nucleus.
-
-In quantile coordinates, $F^\sharp(q)$ is the interval $[0,q]$ and $F_\flat(r)$ is the interval $[r,1]$, so the extremal maps simplify to
-$$
-r^*(q)=\max F^\sharp(q)=q,
-\qquad
-q^*(r)=\min F_\flat(r)=r.
-$$
-To recover physical values, apply the inverse quantile maps: the structural WTP rate is $\phi_R^{-1}(r^*(q))$, and the structural booking threshold request at rate $r$ is $\phi_Q^{-1}(q^*(r))$. On the unit square both are simply the identity along the diagonal.
-
-### Geometric meaning of WTP
-
-In the $(\phi_R, \phi_Q)$ unit square:
-![WTP for a given request quantile](figures/wtp_for_q.jpg)
-- Each request corresponds to a horizontal line at its quantile $q$.
-- Feasible rates sit on or below that line (to the left of the intersection).
-- The WTP $r^*(q)$ is the intersection with the diagonal $x=y$; projecting down gives the maximum feasible rate quantile.
-- Dually, for a fixed rate quantile $r$, the booking threshold $q^*(r)$ is the intersection of the vertical line at $r$ with the diagonal; projecting left gives the least request quantile that will accept that rate.
-- Moving the horizontal line upward (higher $q$) shifts the WTP rightward (higher rate quantile).
 
 ### Adjoint thresholds and the market rejection curve
 
@@ -243,20 +230,6 @@ In our fully symmetric market quantile normalization we have $q^*(r)=r$, so
 $$
 \rho_{\text{market}}(r)=r.
 $$
-Because $r^*$ and $q^*$ are Galois adjoints, the underlying order structure satisfies
-$$
-r \le r^*(q)
-\;\Longleftrightarrow\;
-q^*(r) \le q,
-$$
-and the rejection curve $\rho_{\text{market}}$ is just the probabilistic shadow of the threshold map $q^*$ under the uniform measure on requests.
-
-![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
-
-- If a rate sits at quantile 0.3, then 30% of requests sit below it → they reject.  
-- The market rejection curve is a straight line with slope 1 (the booking curve is its complement, $1-r$).  
-- In the figure, the diagonal $x=y$ splits the unit square: points below it (blue-to-red side) are rejections ($q<r$), points above it are acceptances.
-
 ---
 
 ## 7. A Carrier’s Customer Subset
