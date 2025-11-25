@@ -1,13 +1,10 @@
 # A Structured approach to Quotation pricing in Container Shipping
 
+<!-- TODO rewrite this to avoid overpromising, 
+rather the point if exercise is to introduce structured thinking to specific problem solving at hand -->
 Container-shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy acceptance/rejection outcomes. But once we assume quote requests can be **totally ordered** and that feasible rates respect the same order, everything suddenly becomes simple and structured.
 
 Once we embed both requests and rates into quantiles, the entire accept/reject logic becomes a simple comparison of numbers in $[0,1]$. From that starting point, willingness-to-pay, rejection (and booking) curves, and suggested selling rates all emerge naturally.
-
-This post explains that structure step by step, building toward one key object:
-
-> **The carrier-specific rejection probability curve** (the complement of the booking curve),  
-> which is foundational for computing the **Suggested Selling Rate (SSR)**.
 
 ---
 
