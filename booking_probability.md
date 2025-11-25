@@ -217,19 +217,15 @@ $$
 \mathrm{Nuc}(F)=\{(r,q): r=r^*(q),\, q=q^*(r)\}.
 $$
 
-### Adjoint thresholds and the market rejection curve
 
-The rejection rate answers the dual question: "At this posted rate, what share of the market walks away?" The lower closure $F_\flat(r) = [r,1]$ tells us that all accepting requests lie at or above the booking threshold $q^*(r)$; the rejecting requests are the ones *below* that threshold. With a uniform distribution of request quantiles on $[0,1]$, the market rejection curve is exactly the probability mass below $q^*(r)$:
-$$
-\rho_{\text{market}} : [0,1] \to [0,1], \quad
-\rho_{\text{market}}(r)
-= \Pr(q < q^*(r))
-= q^*(r).
-$$
-In our fully symmetric market quantile normalization we have $q^*(r)=r$, so
-$$
-\rho_{\text{market}}(r)=r.
-$$
+<!-- TODO Please edit and tidy up the below, also we need to com up with subsection name for the following paragraphs, something to do with mutually adjoint subsets -->
+So we get a bijective correspondance between subsets of R and Q, induced by maps r^* and q^*. Just to recap:
+
+map WTP:=r^* answers the question: "For a given quotation request quantile what proportion of all market rate will it accept? In other workds what is the largest acceptable rate quantile?"
+
+The rejection probability map q^* answers the dual question: "At this posted rate, what share of the market walks away? Or equivalently what is the lowest quotation request that will accept"
+
+
 ---
 
 ## 7. A Carrier’s Customer Subset
