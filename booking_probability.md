@@ -78,36 +78,50 @@ This is the fundamental decision rule; rejection happens exactly when $F(r,q)$ i
 
 ## 4. Quantile Embeddings: Putting Everything on $[0,1]$
 
-To compare requests and rates cleanly, embed any finite total order $P$ into $[0,1]$ by turning each element into its cumulative rank: count how many elements are at or below it, then divide by $|P|$.
+To compare requests and rates cleanly, embed any finite total order $Q$ into $[0,1]$ by turning each element into its cumulative rank: count how many elements are at or below it, then divide by $|Q|$.
+
+Define the quantile embedding
+$$
+\phi_Q : Q \to [0,1],
+\qquad
+\phi_Q(q)
+= \frac{|\{q' \in Q : q' \le q\}|-1}{|Q|-1}.
+$$
+
+![Quantile embedding of a finite totally ordered set $Q$ into $[0,1]$](figures/quantile_embedding.jpg)
 
 A more explicit form of that embedding:
-- Begin with the canonical feasibility relation $\mathrm{hom}_P : P^{op}\times P \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_P(p',p) = \mathbf{true}$ exactly when $p'\le p$.
+- Begin with the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$.
 
-- Curry it in the first argument: fix $p$ and read $\mathrm{hom}_P(\,\cdot\,,p)$ as an ordinary function $P \to \mathbf{Bool}$—this is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow p$ (all elements $\le p$), written $\chi_{\downarrow p}(p') = \mathrm{hom}_P(p',p)$.
+- Curry it in the first argument: fix $q$ and read $\mathrm{hom}_Q(\,\cdot\,,q)$ as an ordinary function $Q \to \mathbf{Bool}$—this is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with $\chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q)$.
 
-- Average those indicators uniformly over all $p' \in P$: sum the Boolean values (1 when $p' \le p$, 0 otherwise) and divide by $|P|$. This produces the quantile embedding below and is the same averaging used later when integrating feasibility relations in section 9.2:
+-- Average those indicators uniformly over all $q' \in Q$: sum the Boolean values (1 when $q' \le q$, 0 otherwise) and divide by $|Q|$. This produces a cumulative rank; we then rescale it so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
 $$
-\phi_P(p)
-= \frac{1}{|P|}
-\sum_{p' \in P} \chi_{\downarrow p}(p')
-= \frac{1}{|P|}
-\sum_{p' \in P} \mathrm{hom}_P(p',p).
+\phi_Q(q)
+= \frac{1}{|Q|-1}
+\sum_{q' \in Q} \chi_{\downarrow q}(q')
+- \frac{1}{|Q|-1}
+= \frac{1}{|Q|-1}
+\sum_{q' \in Q} \mathrm{hom}_Q(q',q)
+- \frac{1}{|Q|-1}.
 $$
-Here the average simply measures the fraction of the set that lies in $\downarrow p$: each indicator contributes 1 when $p'$ is below $p$ and 0 otherwise, so the mean over all $p'$ gives the cumulative rank of $p$.
+Here the sum counts how many elements lie in $\downarrow q$: each indicator contributes 1 when $q'$ is below $q$ and 0 otherwise. Subtracting $1$ and dividing by $|Q|-1$ linearly rescales this cumulative rank so that the minimum element of $Q$ gets value $0$ and the maximum gets value $1$.
 
-$$
-\phi_P(p)
-= \frac{|\{p' \in P : p' \le p\}|}{|P|}.
-$$
 ### Request quantiles
-Applied to market requests (take $P = Q_{\text{market}}$):
+Applied to market requests (take $Q = Q_{\text{market}}$):
 
 $$
-\phi_Q(q) = \frac{|\{q' \in Q_{\text{market}} : q' \le q\}|}{|Q_{\text{market}}|}
-= \frac{k}{N} \text{ for } q = q_{(k)}.
+\phi_Q : Q_{\text{market}} \to [0,1],
+\qquad
+\phi_Q(q) = \frac{|\{q' \in Q_{\text{market}} : q' \le q\}|-1}{|Q_{\text{market}}|-1}
+= \frac{k-1}{N-1} \text{ for } q = q_{(k)}.
 $$
 
-Every request gets a rank between 0 and 1.
+Every request gets a rank between 0 and 1. We write
+$$
+[0,1]_Q := \mathrm{im}(\phi_Q) \subseteq [0,1]
+$$
+for the resulting request‑quantile axis inside the unit interval.
 
 ### Rate quantiles
 
@@ -118,10 +132,15 @@ $$
 For rates, the same construction with $P = R_{\text{market}}$ gives:
 
 $$
-\phi_R(r) = \frac{|\{r' \in R_{\text{market}} : r' \le r\}|}{|R_{\text{market}}|}.
+\phi_R(r) = \frac{|\{r' \in R_{\text{market}} : r' \le r\}|-1}{|R_{\text{market}}|-1}.
 $$
+We similarly denote the image of $\phi_R$ by
+$$
+[0,1]_R := \mathrm{im}(\phi_R) \subseteq [0,1],
+$$
+the rate‑quantile axis inside the unit interval.
 
-Because $m$ is monotone and preserves ranks, $\phi_R \circ m$ and $\phi_Q$ coincide, so $Q_{\text{market}}$ and $R_{\text{market}}$ are isomorphic as total orders via the shared quantile axis.
+Because $m$ is monotone and preserves ranks, $\phi_R \circ m$ and $\phi_Q$ coincide, so $Q_{\text{market}}$ and $R_{\text{market}}$ are isomorphic as total orders via their quantile images $[0,1]_Q$ and $[0,1]_R$ (both sitting inside the same unit interval).
 
 $$
 \phi_R(m(q_{(k)})) = \phi_Q(q_{(k)}).
@@ -130,10 +149,16 @@ $$
 ### Intuition
 
 - Now every request and every rate corresponds to a *single number* in $[0,1]$.  
-- They live on the same axis.  
+- They live on the same axis; we use subscripts such as $[0,1]_Q$ and $[0,1]_R$ only when we want to remember whether a quantile came from requests or from rates.  
 - Higher quantile = higher willingness to pay / higher offered rate.
 
-From here on we work entirely in quantile coordinates on $[0,1]$, reusing $r$ and $q$ to denote rate and request quantiles. To recover physical values, apply the inverses $\phi_R^{-1}$ or $\phi_Q^{-1}$ when needed.
+From here on we work entirely in quantile coordinates on $[0,1]$, reusing $r$ and $q$ to denote rate and request quantiles. To recover physical values, apply the inverses
+$$
+\phi_R^{-1} : [0,1]_R \to R_{\text{market}},
+\qquad
+\phi_Q^{-1} : [0,1]_Q \to Q_{\text{market}},
+$$
+when needed.
 
 ---
 
@@ -143,7 +168,7 @@ From here on we work entirely in quantile coordinates on $[0,1]$, reusing $r$ an
 
 In quantile space, the market feasibility relation becomes a $\mathbf{Bool}$-enriched **profunctor** between the ordered quantile spaces of rates and requests:
 $$
-F : [0,1]^{op} \times [0,1] \to \mathbf{Bool},
+F : [0,1]_R^{op} \times [0,1]_Q \to \mathbf{Bool},
 \qquad
 F(r,q) = \mathbf{true} \;\Longleftrightarrow\; r \le q.
 $$
@@ -229,12 +254,13 @@ Equivalently, we may parameterize nucleus pairs just by their extremal points:
 $$
 \mathrm{Nuc}(F)_{\mathrm{ext}}
 =
-\{(r^*(q),q) : q \in [0,1]_Q\}
-=
-\{(r,q^*(r)) : r \in [0,1]_R\}
-=
-\{(r,q) : r = r^*(q),\; q = q^*(r)\}.
+\{(r,q) \in [0,1]_R \times [0,1]_Q : r = r^*(q),\; q = q^*(r)\}.
 $$
+
+![Market nucleus points in $(r,q)$ space](figures/nucleus_points.jpg)
+- A generic off-diagonal point $(r,q)$ is mapped horizontally to $(r^*(q),q)$ and vertically to $(r,q^*(r))$, illustrating how WTP and rejection are extracted as extremal summaries of the feasibility relation.
+- Points on the diagonal where $r=r^*(q)$ and $q=q^*(r)$ are fixed by these mappings; these diagonal points are exactly the elements of $\mathrm{Nuc}(F)_{\mathrm{ext}}$.
+- The figure thus shows how the nucleus picks out a one‑dimensional set of extremal points while arbitrary $(r,q)$ pairs are mapped onto this WTP/rejection correspondence.
 
 ### Adjoint scalar maps, WTP, and rejection
 
@@ -261,45 +287,195 @@ In words: at the structural willingness‑to‑pay level of a request at quantil
 
 ---
 
-## 7. A Carrier’s Customer Subset
+## 7. A Carrier’s Customer Subset as a Restricted Nucleus
 
-Let:
-
+So far we have described the market as a single feasibility profunctor
 $$
-j : Q_{\text{carrier}} \hookrightarrow Q_{\text{market}}
+F : [0,1]_R^{op} \times [0,1]_Q \to \mathbf{Bool}
 $$
-
-be inclusion.
-
-Carrier-induced rate map:
-
+with nucleus $\mathrm{Nuc}(F)$ and extremal scalar maps
 $$
-m\circ j : Q_{\text{carrier}} \to R_{\text{market}}.
+r^* : [0,1]_Q \to [0,1]_R,
+\qquad
+q^* : [0,1]_R \to [0,1]_Q,
 $$
-
-Carrier quantile embedding:
-
+encoding structural willingness‑to‑pay and the market rejection map. The corresponding pointwise nucleus records these maps at the level of extremal pairs:
 $$
-\phi_{\text{carrier}}(q)
+\mathrm{Nuc}(F)_{\mathrm{ext}}
+= \{(r,q) \in [0,1]_R \times [0,1]_Q : r = r^*(q),\; q = q^*(r)\}.
+$$
+In practice, however, an individual carrier only sees a subset of the market’s quote requests.
+
+### Restricting the request side
+
+Let $Q_{\text{carrier}}\subseteq Q_{\text{market}}$ be the subset of market requests that actually appear in the carrier’s portfolio. Applying the same quantile construction as in section 4 to $Q_{\text{carrier}}$ produces a carrier request‑quantile subset
+$$
+[0,1]_{Q_{\text{carrier}}} \subseteq [0,1]
+$$
+as the image of the carrier quantile embedding
+$$
+\phi_{Q_{\text{carrier}}} : Q_{\text{carrier}} \to [0,1],
+\qquad
+\phi_{Q_{\text{carrier}}}(q)
 =
 \frac{
-|\{q' \in Q_{\text{carrier}} : q' \le q\}|
+|\{q' \in Q_{\text{carrier}} : q' \le q\}|-1
+}{
+|Q_{\text{carrier}}|-1
+},
+$$
+and recalling that the market embedding $\phi_Q : Q_{\text{market}} \to [0,1]$ has image $[0,1]_Q\subseteq[0,1]$, the inclusion $Q_{\text{carrier}}\hookrightarrow Q_{\text{market}}$ induces a monotone embedding between the corresponding request‑quantile images
+$$
+j : [0,1]_{Q_{\text{carrier}}} \hookrightarrow [0,1]_Q,
+$$
+which we read as “carrier request quantiles included into market request quantiles”. 
+Because these are totally ordered sets, this inclusion sits in a Galois pair of adjoints. The **left adjoint**
+$$
+j_! : [0,1]_Q \to [0,1]_{Q_{\text{carrier}}},
+$$
+is characterized by
+$$
+j_!(q) \le q_c
+\;\Longleftrightarrow\;
+q \le j(q_c)
+\quad
+\text{for all } q \in [0,1]_Q,\; q_c \in [0,1]_{Q_{\text{carrier}}}.
+$$
+On the chain $[0,1]_{Q_{\text{carrier}}}$ this becomes the **least** carrier quantile whose image lies above $q$:
+$$
+j_!(q)
+=
+\min \{ q_c \in [0,1]_{Q_{\text{carrier}}} : q \le j(q_c)\}
+=
+1-
+\frac{
+|\{ q_c \in [0,1]_{Q_{\text{carrier}}} : q \le j(q_c)\}|-1
+}{
+|Q_{\text{carrier}}|-1
+},
+$$
+whenever such a minimum exists. In a more familiar numerical setting, this plays the role of a “ceiling” operation: given an embedded value $q$, $j_!(q)$ picks the smallest carrier quantile that does not lie below it. Because $j$ is an order-embedding, the composite acts as the identity on carrier quantiles:
+$$
+j_!\bigl(j(q_c)\bigr) = q_c
+\quad
+\text{for all } q_c \in [0,1]_{Q_{\text{carrier}}}.
+$$
+
+![Left adjoint sending market quantiles down to carrier quantiles](figures/left_adjoint.jpg)
+- The inclusion $j$ is drawn in green and sends carrier quantiles $q_c$ into the market quantile set $[0,1]_Q$.
+- The left adjoint $j_!$ is drawn in red and sends each market quantile $q$ **down** to the least carrier quantile $q_c$ whose image lies at or above $q$.
+- In terms of order, $j_!(q)$ is the best carrier-side approximation *from below* to $q$ that respects the inclusion $j$.
+
+Symmetrically, the **right adjoint**
+$$
+\overline{j} : [0,1]_Q \to [0,1]_{Q_{\text{carrier}}},
+$$
+is characterized by
+$$
+j(q_c) \le q
+\;\Longleftrightarrow\;
+q_c \le \overline{j}(q)
+\quad
+\text{for all } q \in [0,1]_Q,\; q_c \in [0,1]_{Q_{\text{carrier}}}.
+$$
+Concretely, $\overline{j}(q)$ is the largest carrier quantile that still maps below (or equal to) the market quantile $q$; in our finite setting
+$$
+\overline{j}(q)
+=
+\max \{ q_c \in [0,1]_{Q_{\text{carrier}}} : j(q_c) \le q\}
+=
+\frac{
+|\{q_c \in [0,1]_{Q_{\text{carrier}}} : j(q_c) \le q\}|
 }{
 |Q_{\text{carrier}}|
 }.
 $$
-
-This expresses the carrier’s internal demand distribution on the same $[0,1]$ quantile axis.
+Both adjoints will be useful: in what follows we use the right adjoint $\overline{j}$ to define the carrier rejection map $q^*_{\text{carrier}}$ from the market rejection map $q^*$, and later constructions can equally be phrased in terms of the left adjoint $j_!$ when pushing carrier quantiles forward into market order.
 
 ![Carrier subset pulled back into market quantiles](figures/subset_precomposition.jpg)
-- The inclusion $j$ pulls carrier requests into market order; composing with $m$ places them on the shared quantile line.
-- The carrier distribution typically sits at different quantiles than the market, reflecting its mix.
-- With $\phi_{\text{carrier}}$ we compare carrier demand and market rates on the same $[0,1]$ axis.
+
+Categorically, we restrict the market profunctor along the inclusion $j$ on the request side:
+$$
+F_{\text{carrier}}(r,q)
+:=
+F\bigl(r,\,j(q)\bigr),
+\qquad
+F_{\text{carrier}} : [0,1]_R^{op} \times [0,1]_{Q_{\text{carrier}}} \to \mathbf{Bool}.
+$$
+This is the carrier’s feasibility relation: it records booking behavior only for those requests that actually appear in the carrier’s portfolio.
 
 ![Carrier feasibility relation in quantile space](figures/carrier_feasibility_relation.jpg)
-- Pulling back the market feasibility along $j$ and $m$ smooths the sharp diagonal into the carrier’s own contour.
-- The boundary shifts off $x=y$ because the carrier sees a different mix; acceptance at a given rate quantile can be above or below market.
-- The band still monotone-separates accept/reject regions, defining the carrier’s feasibility frontier.
+- Above is the smoothed version of this restriction, which is approximately how the curve would look if the market pool and the carrier subset were very large
+- The band still monotone‑separates accept/reject regions, defining the carrier’s feasibility frontier.
+- The feasibility boundary shifts off $x=y$ compared to the market because the carrier sees a different mix; acceptance at a given rate quantile can be above or below market.
+
+
+### The carrier nucleus as a slice of the market nucleus
+
+The restricted profunctor $F_{\text{carrier}}$ has its own nucleus
+$$
+\mathrm{Nuc}(F_{\text{carrier}})
+\subseteq
+\mathcal{P}([0,1]_R) \times \mathcal{P}([0,1]_{Q_{\text{carrier}}}),
+$$
+consisting of pairs $(A,B_{\text{c}})$ of rate‑ and carrier‑request sets satisfying
+$$
+A = F_{\text{carrier}}^\sharp(B_{\text{c}}),
+\qquad
+B_{\text{c}} = F_{\text{carrier}}^\flat(A).
+$$
+By construction, this nucleus is just the market nucleus seen through the inclusion $j$: a pair $(A,B_{\text{c}})$ belongs to $\mathrm{Nuc}(F_{\text{carrier}})$ exactly when
+$$
+\bigl(A,\, j(B_{\text{c}})\bigr) \in \mathrm{Nuc}(F).
+$$
+In other words, we obtain the carrier nucleus by restricting the market nucleus on the request side to those subsets that live entirely inside $Q_{\text{carrier}}$. All the structure we built for the market simply pulls back along $j$.
+
+### Carrier extremal maps and the carrier rejection map
+
+Just as the market nucleus admits scalar summaries $(r^*, q^*)$, the restricted nucleus induces carrier‑specific extremal maps
+$$
+r^*_{\text{carrier}} : [0,1]_{Q_{\text{carrier}}} \to [0,1]_R,
+\qquad
+q^*_{\text{carrier}} : [0,1]_R \to [0,1]_{Q_{\text{carrier}}},
+$$
+defined by
+$$
+r^*_{\text{carrier}}(q)
+ :=
+ \max F_{\text{carrier}}^\sharp(\{q\}),
+\qquad
+q^*_{\text{carrier}}(r)
+ :=
+ \min F_{\text{carrier}}^\flat(\{r\}).
+$$
+Unwinding the definitions, the carrier WTP map is simply the market one composed with the inclusion:
+$$
+r^*_{\text{carrier}}(q) = r^*\bigl(j(q)\bigr).
+$$
+For the rejection map, we simply compose the market rejection map with the left adjoint of the inclusion:
+$$
+q^*_{\text{carrier}}(r) = j_!\bigl(q^*(r)\bigr).
+$$
+Here $r^*_{\text{carrier}}(q)$ is the carrier’s structural WTP at carrier request quantile $q$, while $q^*_{\text{carrier}}(r)$ is the carrier’s rejection map: the carrier‑side quantile level at which the rate $r$ starts to be rejected.
+
+The carrier’s pointwise nucleus mirrors the market one at the level of extremal points:
+$$
+\mathrm{Nuc}(F_{\text{carrier}})_{\mathrm{ext}}
+= \{(r,q) \in [0,1]_R \times [0,1]_{Q_{\text{carrier}}} : r = r^*_{\text{carrier}}(q),\; q = q^*_{\text{carrier}}(r)\}.
+$$
+
+Given this construction, the carrier‑specific rejection probability curve described in section 8 is obtained by reading $q^*_{\text{carrier}}$ as a probability via the same “quantile = mass below” semantics used for the market:
+$$
+\rho_{\text{carrier}} : [0,1]_R \to [0,1],
+\qquad
+\rho_{\text{carrier}}(r)
+=
+\Pr\bigl(\text{rejection at rate } r \mid q \in Q_{\text{carrier}}\bigr)
+=
+q^*_{\text{carrier}}(r).
+$$
+Thus the carrier rejection curve is nothing new structurally—it is the rejection map of the restricted nucleus, evaluated numerically as a quantile in $[0,1]$.
+
 ---
 
 ## 8. Why We First Need the Carrier Rejection Curve to Define SSR
