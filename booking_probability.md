@@ -2,7 +2,7 @@
 
 Container‑shipping rate setting often looks reactive and chaotic: market swings, inconsistent customer behavior, and noisy acceptance/rejection outcomes. This note does not attempt to solve pricing end‑to‑end, but instead isolates and studies a simple mathematical core of the problem: how quote requests and candidate rates interact through accept/reject decisions.  
   
-We treat this core as a small case study in applied category theory and order theory. The central object is a feasibility relation that records, for each request–rate pair, whether the quote would be accepted or rejected, and we use it to introduce basic notions such as enriched profunctors, nuclei, and Galois adjunctions in a concrete setting. Familiar constructs—willingness‑to‑pay curves, rejection and booking curves, and suggested selling rates—then appear as derived objects of this single relation once we impose a bit of structure.
+We treat this core as a small case study in applied category theory and order theory. The aim is to introduce basic categorical notions—such as isomorphisms, epimorphisms, and adjunctions—through a concrete problem in the logistics sector. The central object is a feasibility relation that records, for each request–rate pair, whether the quote would be accepted or rejected, and we use it to introduce basic notions such as enriched profunctors, nuclei, and Galois adjunctions in a concrete setting. Familiar constructs—willingness‑to‑pay curves, rejection and booking curves, and suggested selling rates—then appear as derived objects of this single relation once we impose a bit of structure.
 
 ---
 
@@ -476,7 +476,7 @@ q^*_{\text{carrier}}(r).
 $$
 Thus the carrier rejection curve is nothing new structurally—it is the rejection map of the restricted nucleus, evaluated numerically as a quantile in $[0,1]$.
 
----
+<!--
 
 ## 8. Why We First Need the Carrier Rejection Curve to Define SSR
 
@@ -622,3 +622,5 @@ Under the total-order assumption:
 This framework generalizes to multidimensional request spaces and non-total orders.
 
 ---
+
+-->

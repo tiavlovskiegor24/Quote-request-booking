@@ -12,3 +12,8 @@ This repo contains a single write-up, `booking_probability.md`, that rephrases c
 ## Editing tips
 - Keep formulas in quantile coordinates after section 4.
 - Reference figures with relative paths (e.g., `figures/market_feasibility_relation.jpg`).
+
+## TODO
+1. Relate the expected rejection probability to survival analysis.
+2. Finish off the statistical estimation of the booking curve (current section 9).
+3. Future post on fixed points of carrier rejection curves.
