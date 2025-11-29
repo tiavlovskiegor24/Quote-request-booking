@@ -1,4 +1,4 @@
-## 6. Closures, Structural WTP, and the Rejection Adjunction
+## 5. Closures, Structural WTP, and the Rejection Adjunction
 
 ### Closures, the nucleus, and structural WTP
 
@@ -56,7 +56,7 @@ $$
 
 where $q^*(r)$ is the least quotation request quantile that will still accept rate quantile $r$. This corresponds to structural rejection probability.
 
-![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
+![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](../figures/market_feasibility_relation.jpg)
 
 - Dually from Upper closure, for a fixed rate quantile $r$, the booking threshold $q^*(r)$ is the intersection of the vertical line at $r$ with the diagonal; projecting left gives the least request quantile that will accept that rate.
 - If a rate sits at quantile 0.3, then 30% of requests sit below it → they reject.  
@@ -104,7 +104,7 @@ $$
 \mathrm{Nuc}(F)_{\mathrm{ext}}=\{(r,q) \in [0,1]_R \times [0,1]_Q : r = r^*(q),\; q = q^*(r)\}.
 $$
 
-![Market nucleus points in $(r,q)$ space](figures/nucleus_points.jpg)
+![Market nucleus points in $(r,q)$ space](../figures/nucleus_points.jpg)
 - A generic off-diagonal point $(r,q)$ is mapped horizontally to $(r^*(q),q)$ and vertically to $(r,q^*(r))$, illustrating how WTP and rejection are extracted as extremal summaries of the feasibility relation.
 - Points on the diagonal where $r=r^*(q)$ and $q=q^*(r)$ are fixed by these mappings; these diagonal points are exactly the elements of $\mathrm{Nuc}(F)_{\mathrm{ext}}$.
 - The figure thus shows how the nucleus picks out a one‑dimensional set of extremal points while arbitrary $(r,q)$ pairs are mapped onto this WTP/rejection correspondence.
