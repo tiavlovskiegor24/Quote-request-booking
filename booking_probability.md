@@ -59,6 +59,7 @@ If one request is less sensitive and sits higher in the order, the rate assigned
 ## 3. Acceptance/Rejection as a Boolean Feasibility Relation
 Because requests and rates share the same ordering, any quote request can be paired with any candidate market rate and classified: either the offered rate sits below that request’s clearing level and is accepted, or it exceeds it and is rejected.
 Acceptance occurs when the offered rate does not exceed the clearing rate of the request. 
+
 $$
 r \le m(q).
 $$
