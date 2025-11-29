@@ -225,7 +225,7 @@ $$
 For a singleton $A=\{r\}$ this gives $F_\flat(\{r\})=\{ q \in [0,1] : r \le q \}$, which we abbreviate as $F_\flat(r)$. We then define:
 
 $$
-q^* : [0,1] \to [0,1], \quad q^{*}(r)\;:=\;\min F_\flat(r),
+q^* : [0,1] \to [0,1], \qquad q^{*}(r) := \min F_\flat(r),
 $$
 
 where $q^*(r)$ is the least quotation request quantile that will still accept rate quantile $r$. Interpreting quantiles as cumulative mass under the uniform measure on $[0,1]_Q$, this identifies the **market rejection rate**:
