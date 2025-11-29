@@ -34,7 +34,7 @@ $$
 where $r^*(q)$ stands for the largest rate still acceptable for request quantile $q$, or structural Willingless-To-Pay (WTP).
 
 Visualising the $(\phi_R, \phi_Q)$ unit square:
-![WTP for a given request quantile](figures/wtp_for_q.jpg)
+![WTP for a given request quantile](../figures/wtp_for_q.jpg)
 - In the figure, the diagonal $x=y$ splits the unit square: points below it (blue-to-red side) are rejections ($q<r$), points above it are acceptances.
 - Each quotation request corresponds to a horizontal line at its quantile $q$.
 - The WTP $r^*(q)$ is the intersection with the diagonal $x=y$; projecting down gives the maximum feasible rate quantile.
@@ -109,6 +109,7 @@ $$
 - Points on the diagonal where $r=r^*(q)$ and $q=q^*(r)$ are fixed by these mappings; these diagonal points are exactly the elements of $\mathrm{Nuc}(F)_{\mathrm{ext}}$.
 - The figure thus shows how the nucleus picks out a one‑dimensional set of extremal points while arbitrary $(r,q)$ pairs are mapped onto this WTP/rejection correspondence.
 
+<!-- TODO make the below a separate section -->
 ### Adjoint scalar maps, WTP, and rejection
 
 The scalar maps $r^*$ and $q^*$ summarize the nucleus at the level of individual quantiles.

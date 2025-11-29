@@ -91,7 +91,7 @@ j_!\bigl(j(q_c)\bigr) = q_c
 \text{for all } q_c \in [0,1]_{Q_{\text{carrier}}}.
 $$
 
-![Left adjoint sending market quantiles down to carrier quantiles](figures/left_adjoint.jpg)
+![Left adjoint sending market quantiles down to carrier quantiles](../figures/left_adjoint.jpg)
 - The inclusion $j$ is drawn in green and sends carrier quantiles $q_c$ into the market quantile set $[0,1]_Q$.
 - The left adjoint $j_!$ is drawn in red and sends each market quantile $q$ **down** to the least carrier quantile $q_c$ whose image lies at or above $q$.
 - In terms of order, $j_!(q)$ is the best carrier-side approximation *from below* to $q$ that respects the inclusion $j$.
@@ -128,7 +128,7 @@ $$
 
 Both adjoints will be useful: in what follows we use the right adjoint $\overline{j}$ to define the carrier rejection map $q^*_{\text{carrier}}$ from the market rejection map $q^*$, and later constructions can equally be phrased in terms of the left adjoint $j_!$ when pushing carrier quantiles forward into market order.
 
-![Carrier subset pulled back into market quantiles](figures/subset_precomposition.jpg)
+![Carrier subset pulled back into market quantiles](../figures/subset_precomposition.jpg)
 
 Categorically, we restrict the market profunctor along the inclusion $j$ on the request side:
 
@@ -142,7 +142,7 @@ $$
 
 This is the carrier’s feasibility relation: it records booking behavior only for those requests that actually appear in the carrier’s portfolio.
 
-![Carrier feasibility relation in quantile space](figures/carrier_feasibility_relation.jpg)
+![Carrier feasibility relation in quantile space](../figures/carrier_feasibility_relation.jpg)
 - Above is the smoothed version of this restriction, which is approximately how the curve would look if the market pool and the carrier subset were very large
 - The band still monotone‑separates accept/reject regions, defining the carrier’s feasibility frontier.
 - The feasibility boundary shifts off $x=y$ compared to the market because the carrier sees a different mix; acceptance at a given rate quantile can be above or below market.

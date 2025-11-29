@@ -11,7 +11,7 @@ $$
 = \frac{|\{q' \in Q : q' \le q\}|-1}{|Q|-1}.
 $$
 
-![Quantile embedding of a finite totally ordered set $Q$ into $[0,1]$](figures/quantile_embedding.jpg)
+![Quantile embedding of a finite totally ordered set $Q$ into $[0,1]$](../figures/quantile_embedding.jpg)
 
 A more explicit form of that embedding:
 Begin with the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$.

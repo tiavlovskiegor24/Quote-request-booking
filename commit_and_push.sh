@@ -6,7 +6,7 @@ set -euo pipefail
 # If no files are given, booking_probability.md and commit_and_push.sh are staged.
 # If no message is given, a default is used.
 
-MSG="Split booking_probability.md into per-section files"
+MSG="Fix section image paths for split docs"
 if [[ $# -ge 1 ]]; then
   MSG="$1"
 fi
