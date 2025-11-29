@@ -95,16 +95,16 @@ A more explicit form of that embedding:
 
 - Curry it in the first argument: fix $q$ and read $\mathrm{hom}_Q(\,\cdot\,,q)$ as an ordinary function $Q \to \mathbf{Bool}$—this is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with $\chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q)$.
 
--- Average those indicators uniformly over all $q' \in Q$: sum the Boolean values (1 when $q' \le q$, 0 otherwise) and divide by $|Q|$. This produces a cumulative rank; we then rescale it so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
+- Average those indicators uniformly over all $q' \in Q$: sum the Boolean values (1 when $q' \le q$, 0 otherwise) and divide by $|Q|$. This produces a cumulative rank; we then rescale it so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is:
+
 $$
+\begin{aligned}
 \phi_Q(q)
-= \frac{1}{|Q|-1}
-\sum_{q' \in Q} \chi_{\downarrow q}(q')
-- \frac{1}{|Q|-1}
-= \frac{1}{|Q|-1}
-\sum_{q' \in Q} \mathrm{hom}_Q(q',q)
-- \frac{1}{|Q|-1}.
+&= \frac{1}{|Q|-1} \sum_{q' \in Q} \chi_{\downarrow q}(q') - \frac{1}{|Q|-1} \\[4pt]
+&= \frac{1}{|Q|-1} \sum_{q' \in Q} \mathrm{hom}_Q(q',q) - \frac{1}{|Q|-1}.
+\end{aligned}
 $$
+
 Here the sum counts how many elements lie in $\downarrow q$: each indicator contributes 1 when $q'$ is below $q$ and 0 otherwise. Subtracting $1$ and dividing by $|Q|-1$ linearly rescales this cumulative rank so that the minimum element of $Q$ gets value $0$ and the maximum gets value $1$.
 
 ### Request quantiles
@@ -210,7 +210,13 @@ For a singleton $A=\{r\}$ this gives $F_\flat(\{r\})=\{ q \in [0,1] : r \le q \}
 $$
 q^* : [0,1] \to [0,1], \quad q^*(r)\;:=\;\min F_\flat(r),
 $$
-where $q^*(r)$ is the least quotation request quantile that will still accept rate quantile $r$. This corresponds to structural rejection probability.
+where $q^*(r)$ is the least quotation request quantile that will still accept rate quantile $r$. Interpreting quantiles as cumulative mass under the uniform measure on $[0,1]_Q$, this identifies the **market rejection rate**:
+$$
+\rho_{\text{market}} : [0,1]_R \to [0,1],
+\qquad
+\rho_{\text{market}}(r) = \Pr(q < q^*(r)) = q^*(r).
+$$
+In words: offering a rate at quantile $r$ will be rejected by exactly the fraction $q^*(r)$ of requests that sit below the acceptance threshold $q^*(r)$. The market booking probability is the complement $1-\rho_{\text{market}}(r)$.
 
 ![Market feasibility relation in quantile space; rejections lie below the diagonal, acceptances above](figures/market_feasibility_relation.jpg)
 
@@ -343,16 +349,18 @@ q \le j(q_c)
 $$
 On the chain $[0,1]_{Q_{\text{carrier}}}$ this becomes the **least** carrier quantile whose image lies above $q$:
 $$
+\begin{aligned}
 j_!(q)
-=
-\min \{ q_c \in [0,1]_{Q_{\text{carrier}}} : q \le j(q_c)\}
-=
+&=
+\min \{ q_c \in [0,1]_{Q_{\text{carrier}}} : q \le j(q_c)\} \\[4pt]
+&=
 1-
 \frac{
 |\{ q_c \in [0,1]_{Q_{\text{carrier}}} : q \le j(q_c)\}|-1
 }{
 |Q_{\text{carrier}}|-1
-},
+}.
+\end{aligned}
 $$
 whenever such a minimum exists. In a more familiar numerical setting, this plays the role of a “ceiling” operation: given an embedded value $q$, $j_!(q)$ picks the smallest carrier quantile that does not lie below it. Because $j$ is an order-embedding, the composite acts as the identity on carrier quantiles:
 $$
@@ -380,15 +388,17 @@ q_c \le \overline{j}(q)
 $$
 Concretely, $\overline{j}(q)$ is the largest carrier quantile that still maps below (or equal to) the market quantile $q$; in our finite setting
 $$
+\begin{aligned}
 \overline{j}(q)
-=
-\max \{ q_c \in [0,1]_{Q_{\text{carrier}}} : j(q_c) \le q\}
-=
+&=
+\max \{ q_c \in [0,1]_{Q_{\text{carrier}}} : j(q_c) \le q\} \\[4pt]
+&=
 \frac{
 |\{q_c \in [0,1]_{Q_{\text{carrier}}} : j(q_c) \le q\}|
 }{
 |Q_{\text{carrier}}|
 }.
+\end{aligned}
 $$
 Both adjoints will be useful: in what follows we use the right adjoint $\overline{j}$ to define the carrier rejection map $q^*_{\text{carrier}}$ from the market rejection map $q^*$, and later constructions can equally be phrased in terms of the left adjoint $j_!$ when pushing carrier quantiles forward into market order.
 
