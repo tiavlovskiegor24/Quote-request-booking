@@ -362,15 +362,10 @@ $$
 as the image of the carrier quantile embedding
 
 $$
-\phi_{Q_{\text{carrier}}} : Q_{\text{carrier}} \to [0,1],
-\qquad
+\phi_{Q_{\text{carrier}}} : Q_{\text{carrier}} \to [0,1], \qquad
 \phi_{Q_{\text{carrier}}}(q)
 =
-\frac{
-|\{q' \in Q_{\text{carrier}} : q' \le q\}|-1
-}{
-|Q_{\text{carrier}}|-1
-},
+\frac{|\{q' \in Q_{\text{carrier}} : q' \le q\}|-1}{|Q_{\text{carrier}}|-1}.
 $$
 
 and recalling that the market embedding $\phi_Q : Q_{\text{market}} \to [0,1]$ has image $[0,1]_Q\subseteq[0,1]$, the inclusion $Q_{\text{carrier}}\hookrightarrow Q_{\text{market}}$ induces a monotone embedding between the corresponding request‑quantile images
