@@ -227,14 +227,17 @@ In words: offering a rate at quantile $r$ will be rejected by exactly the fracti
 ### The nucleus
 
 Working in quantile coordinates, we view the feasibility relation as a $\mathbf{Bool}$‑enriched profunctor
+
 $$
 F : [0,1]_R^{op} \times [0,1]_Q \to \mathbf{Bool},
 $$
 where we implicitly identify market rates and requests with their quantiles via $\phi_R$ and $\phi_Q$. The **nucleus** of $F$ is the subset
+
 $$
 \mathrm{Nuc}(F) \;\subseteq\; \mathcal{P}([0,1]_R) \times \mathcal{P}([0,1]_Q)
 $$
 of pairs $(A,B)$ of rate‑ and request‑quantile sets defined by
+
 $$
 \mathrm{Nuc}(F)
 =
@@ -243,12 +246,14 @@ $$
 with $A \subseteq [0,1]_R$ a set of rate quantiles and $B \subseteq [0,1]_Q$ a set of request quantiles. Such pairs are “as tight as possible” with respect to $F$: $A$ is exactly the set of rates supported by $B$, and $B$ is exactly the set of requests supporting $A$.
 
 The extremal maps introduced above
+
 $$
 r^* : [0,1]_Q \to [0,1]_R, \quad r^*(q) := \max F^\sharp(\{q\}),
 \qquad
 q^* : [0,1]_R \to [0,1]_Q, \quad q^*(r) := \min F_\flat(\{r\}),
 $$
 extract these interval endpoints. Every nucleus pair can be encoded either by its request endpoint or by its rate endpoint:
+
 $$
 \mathrm{Nuc}(F)
 =
@@ -257,6 +262,7 @@ $$
 \{([0,r],[q^*(r),1]) : r \in [0,1]_R\}.
 $$
 Equivalently, we may parameterize nucleus pairs just by their extremal points:
+
 $$
 \mathrm{Nuc}(F)_{\mathrm{ext}}
 =
