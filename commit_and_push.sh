@@ -6,7 +6,7 @@ set -euo pipefail
 # If no files are given, booking_probability.md and commit_and_push.sh are staged.
 # If no message is given, a default is used.
 
-MSG="Separate indicator equation into its own block"
+MSG="Split booking_probability.md into per-section files"
 if [[ $# -ge 1 ]]; then
   MSG="$1"
 fi
