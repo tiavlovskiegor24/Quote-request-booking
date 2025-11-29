@@ -263,12 +263,6 @@ with $A \subseteq [0,1]_R$ a set of rate quantiles and $B \subseteq [0,1]_Q$ a s
 
 The extremal maps introduced above
 
-$$
-r^* : [0,1]_Q \to [0,1]_R, \quad r^{*}(q) := \max F^\sharp(\{q\}),
-\qquad
-q^* : [0,1]_R \to [0,1]_Q, \quad q^{*}(r) := \min F_\flat(\{r\}),
-$$
-
 extract these interval endpoints. Every nucleus pair can be encoded either by its request endpoint or by its rate endpoint:
 
 $$
