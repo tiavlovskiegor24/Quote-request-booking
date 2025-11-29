@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Commit message can be passed as first argument; otherwise use a default.
-MSG="${1:-"Update docs formatting and math rendering"}"
+# Commit message can be passed as first argument; otherwise use a default tailored
+# to the most recent documentation tweaks.
+# Usage: ./commit_and_push.sh ["your commit message"]
+MSG="${1:-"Fix math rendering and flatten embedding steps"}"
 
 # Show status for awareness.
 echo "== Git status =="
@@ -20,9 +22,17 @@ fi
 echo "== Committing =="
 git commit -m "${MSG}"
 
-# Push to the current branch on origin.
+# Push to the current branch on origin (or its upstream if configured).
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-echo "== Pushing to origin/${BRANCH} =="
-git push origin "${BRANCH}"
+UPSTREAM="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || true)"
+TARGET_REMOTE="origin"
+TARGET_REF="${BRANCH}"
+if [ -n "${UPSTREAM}" ]; then
+  TARGET_REMOTE="${UPSTREAM%%/*}"
+  TARGET_REF="${UPSTREAM#*/}"
+fi
+
+echo "== Pushing to ${TARGET_REMOTE}/${TARGET_REF} =="
+git push "${TARGET_REMOTE}" "${BRANCH}:${TARGET_REF}"
 
 echo "Done."
