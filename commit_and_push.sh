@@ -4,7 +4,7 @@ set -euo pipefail
 # Commit message can be passed as first argument; otherwise use a default tailored
 # to the most recent documentation tweaks.
 # Usage: ./commit_and_push.sh ["your commit message"]
-MSG="${1:-"Fix math rendering and flatten embedding steps"}"
+MSG="${1:-"Tidy math formatting and indicator wording"}"
 
 # Show status for awareness.
 echo "== Git status =="
