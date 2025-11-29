@@ -17,3 +17,4 @@ This repo contains a single write-up, `booking_probability.md`, that rephrases c
 1. Relate the expected rejection probability to survival analysis.
 2. Finish off the statistical estimation of the booking curve (current section 9).
 3. Future post on fixed points of carrier rejection curves.
+4. Use Lawvere’s fixed-point theorem to show that total orders are isomorphic to their duals (i.e., dual maps form a basis for monotone functions $Q \to \mathbf{Bool}$); explore whether an analogue holds for all monotone functions $Q \to [0,1]$.
