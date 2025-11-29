@@ -95,7 +95,7 @@ $$
 A more explicit form of that embedding:
 Begin with the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$.
 
-Curry it in the first argument: fix $q$ and read $\mathrm{hom}_Q(,q)$ as an ordinary function $Q \to \mathbf{Bool}$—this is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with $\chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q)$.
+Curry it in the first argument: fix $q$ and read $\mathrm{hom}_Q(-,q) : Q \to \mathbf{Bool}$ as an ordinary function. This is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with $\chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q)$.
 
 Average those indicators uniformly over all $q' \in Q$: sum the Boolean values (1 when $q' \le q$, 0 otherwise) and divide by $|Q|$. This produces a cumulative rank; we then rescale it so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
 

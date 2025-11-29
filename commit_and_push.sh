@@ -6,7 +6,7 @@ set -euo pipefail
 # If no files are given, booking_probability.md and commit_and_push.sh are staged.
 # If no message is given, a default is used.
 
-MSG="Test paragraph rendering with separate math block"
+MSG="Clarify hom_Q indicator rendering"
 if [[ $# -ge 1 ]]; then
   MSG="$1"
 fi
