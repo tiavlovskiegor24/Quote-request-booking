@@ -225,7 +225,7 @@ $$
 For a singleton $A=\{r\}$ this gives $F_\flat(\{r\})=\{ q \in [0,1] : r \le q \}$, which we abbreviate as $F_\flat(r)$. We then define:
 
 $$
-q^* : [0,1] \to [0,1], \quad q^*(r)\;:=\;\min F_\flat(r),
+q^* : [0,1] \to [0,1], \quad q^{*}(r)\;:=\;\min F_\flat(r),
 $$
 
 where $q^*(r)$ is the least quotation request quantile that will still accept rate quantile $r$. Interpreting quantiles as cumulative mass under the uniform measure on $[0,1]_Q$, this identifies the **market rejection rate**:
@@ -233,7 +233,7 @@ where $q^*(r)$ is the least quotation request quantile that will still accept ra
 $$
 \rho_{\text{market}} : [0,1]_R \to [0,1],
 \qquad
-\rho_{\text{market}}(r) = \Pr\bigl(q < q^*(r)\bigr) = q^*(r).
+\rho_{\text{market}}(r) = \Pr\bigl(q < q^{*}(r)\bigr) = q^{*}(r).
 $$
 
 In words: offering a rate at quantile $r$ will be rejected by exactly the fraction $q^*(r)$ of requests that sit below the acceptance threshold $q^*(r)$. The market booking probability is the complement $1-\rho_{\text{market}}(r)$.
