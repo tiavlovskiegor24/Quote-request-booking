@@ -6,7 +6,7 @@ set -euo pipefail
 # If no files are given, booking_probability.md and commit_and_push.sh are staged.
 # If no message is given, a default is used.
 
-MSG="Fix section image paths for split docs"
+MSG="Double-escape set braces for KaTeX"
 if [[ $# -ge 1 ]]; then
   MSG="$1"
 fi
