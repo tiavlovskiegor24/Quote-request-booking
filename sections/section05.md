@@ -88,7 +88,9 @@ The extremal maps introduced above
 
 $$
 r^* : [0,1]_Q \to [0,1]_R, \quad r^{*}(q) := \max F^\sharp(\{q\}),
-\qquad
+$$
+
+$$
 q^* : [0,1]_R \to [0,1]_Q, \quad q^{*}(r) := \min F_\flat(\{r\}),
 $$
 
