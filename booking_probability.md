@@ -182,7 +182,7 @@ In quantile space, the market feasibility relation becomes a $\mathbf{Bool}$-enr
 $$
 F : [0,1]_R^{op} \times [0,1]_Q \to \mathbf{Bool},
 \qquad
-F(r,q) = \mathbf{true} \;\Longleftrightarrow\; r \le q.
+F(r,q) = \mathbf{true} \; \Longleftrightarrow \; r \le q.
 $$
 
 This single feasibility relation induces an adjunction between the powerset lattices $\mathcal{P}([0,1])$ of rates and requests via two dual closure operators:
