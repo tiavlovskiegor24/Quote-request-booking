@@ -82,6 +82,7 @@ This is the fundamental decision rule; rejection happens exactly when $F(r,q)$ i
 To compare requests and rates cleanly, embed any finite total order $Q$ into $[0,1]$ by turning each element into its cumulative rank: count how many elements are at or below it, then divide by $|Q|$.
 
 Define the quantile embedding
+
 $$
 \phi_Q : Q \to [0,1],
 \qquad
