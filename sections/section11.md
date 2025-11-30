@@ -10,7 +10,7 @@ Here $y_i=1$ means a booking (so $1-y_i$ is a rejection indicator). Two behavior
 
 ### Targeted (WTP-aligned) pricing
 
-$r_i \approx r^*(q_i)$.
+$r_i \approx \hat r(q_i)$.
 
 ### Random-rate pricing
 

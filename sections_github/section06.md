@@ -9,16 +9,16 @@ $$
 with nucleus $\\mathrm{Nuc}(F)$ and extremal scalar maps
 
 $$
-r^* : [0,1]_Q \\to [0,1]_R,
+\\hat r : [0,1]_Q \\to [0,1]_R,
 \\qquad
-q^* : [0,1]_R \\to [0,1]_Q,
+\\hat q : [0,1]_R \\to [0,1]_Q,
 $$
 
 encoding structural willingness‑to‑pay and the market rejection map. The corresponding pointwise nucleus records these maps at the level of extremal pairs:
 
 $$
 \\mathrm{Nuc}(F)_{\\mathrm{ext}}
-= \\{(r,q) \\in [0,1]_R \\times [0,1]_Q : r = r^*(q),\\; q = q^*(r)\\}.
+= \\{(r,q) \\in [0,1]_R \\times [0,1]_Q : r = \\hat r(q),\\; q = \\hat q(r)\\}.
 $$
 
 In practice, however, an individual carrier only sees a subset of the market’s quote requests.
@@ -126,7 +126,7 @@ $$
 }.
 $$
 
-Both adjoints will be useful: in what follows we use the right adjoint $\\overline{j}$ to define the carrier rejection map $q^*_{\\text{carrier}}$ from the market rejection map $q^*$, and later constructions can equally be phrased in terms of the left adjoint $j_!$ when pushing carrier quantiles forward into market order.
+Both adjoints will be useful: in what follows we use the right adjoint $\\overline{j}$ to define the carrier rejection map $\\hat q_{\\text{carrier}}$ from the market rejection map $\\hat q$, and later constructions can equally be phrased in terms of the left adjoint $j_!$ when pushing carrier quantiles forward into market order.
 
 ![Carrier subset pulled back into market quantiles](../figures/subset_precomposition.jpg)
 
@@ -176,22 +176,22 @@ In other words, we obtain the carrier nucleus by restricting the market nucleus 
 
 ### Carrier extremal maps and the carrier rejection map
 
-Just as the market nucleus admits scalar summaries $(r^*, q^*)$, the restricted nucleus induces carrier‑specific extremal maps
+Just as the market nucleus admits scalar summaries $(\\hat r, \\hat q)$, the restricted nucleus induces carrier‑specific extremal maps
 
 $$
-r^*_{\\text{carrier}} : [0,1]_{Q_{\\text{carrier}}} \\to [0,1]_R,
+\\hat r_{\\text{carrier}} : [0,1]_{Q_{\\text{carrier}}} \\to [0,1]_R,
 \\qquad
-q^*_{\\text{carrier}} : [0,1]_R \\to [0,1]_{Q_{\\text{carrier}}},
+\\hat q_{\\text{carrier}} : [0,1]_R \\to [0,1]_{Q_{\\text{carrier}}},
 $$
 
 defined by
 
 $$
-r^*_{\\text{carrier}}(q)
+\\hat r_{\\text{carrier}}(q)
  :=
  \\max F_{\\text{carrier}}^\\sharp(\\{q\\}),
 \\qquad
-q^*_{\\text{carrier}}(r)
+\\hat q_{\\text{carrier}}(r)
  :=
  \\min F_{\\text{carrier}}^\\flat(\\{r\\}).
 $$
@@ -199,25 +199,25 @@ $$
 Unwinding the definitions, the carrier WTP map is simply the market one composed with the inclusion:
 
 $$
-r^*_{\\text{carrier}}(q) = r^*\\bigl(j(q)\\bigr).
+\\hat r_{\\text{carrier}}(q) = \\hat r\\bigl(j(q)\\bigr).
 $$
 
 For the rejection map, we simply compose the market rejection map with the left adjoint of the inclusion:
 
 $$
-q^*_{\\text{carrier}}(r) = j_!\\bigl(q^*(r)\\bigr).
+\\hat q_{\\text{carrier}}(r) = j_!\\bigl(\\hat q(r)\\bigr).
 $$
 
-Here $r^*_{\\text{carrier}}(q)$ is the carrier’s structural WTP at carrier request quantile $q$, while $q^*_{\\text{carrier}}(r)$ is the carrier’s rejection map: the carrier‑side quantile level at which the rate $r$ starts to be rejected.
+Here $\\hat r_{\\text{carrier}}(q)$ is the carrier’s structural WTP at carrier request quantile $q$, while $\\hat q_{\\text{carrier}}(r)$ is the carrier’s rejection map: the carrier‑side quantile level at which the rate $r$ starts to be rejected.
 
 The carrier’s pointwise nucleus mirrors the market one at the level of extremal points:
 
 $$
 \\mathrm{Nuc}(F_{\\text{carrier}})_{\\mathrm{ext}}
-= \\{(r,q) \\in [0,1]_R \\times [0,1]_{Q_{\\text{carrier}}} : r = r^*_{\\text{carrier}}(q),\\; q = q^*_{\\text{carrier}}(r)\\}.
+= \\{(r,q) \\in [0,1]_R \\times [0,1]_{Q_{\\text{carrier}}} : r = \\hat r_{\\text{carrier}}(q),\\; q = \\hat q_{\\text{carrier}}(r)\\}.
 $$
 
-Given this construction, the carrier‑specific rejection probability curve described in section 8 is obtained by reading $q^*_{\\text{carrier}}$ as a probability via the same “quantile = mass below” semantics used for the market:
+Given this construction, the carrier‑specific rejection probability curve described in section 8 is obtained by reading $\\hat q_{\\text{carrier}}$ as a probability via the same “quantile = mass below” semantics used for the market:
 
 $$
 \\rho_{\\text{carrier}} : [0,1]_R \\to [0,1],
@@ -226,7 +226,7 @@ $$
 =
 \\Pr\\bigl(\\text{rejection at rate } r \\mid q \\in Q_{\\text{carrier}}\\bigr)
 =
-q^*_{\\text{carrier}}(r).
+\\hat q_{\\text{carrier}}(r).
 $$
 
 Thus the carrier rejection curve is nothing new structurally—it is the rejection map of the restricted nucleus, evaluated numerically as a quantile in $[0,1]$.
