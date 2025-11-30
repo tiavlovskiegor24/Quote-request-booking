@@ -98,8 +98,8 @@ extract these interval endpoints. Every nucleus pair can be encoded either by it
 
 $$
 \\mathrm{Nuc}(F)
-=\\\\{([0,r^*(q)],[q,1]) : q \\in [0,1]_Q\\\\}
-=\\\\{([0,r],[q^*(r),1]) : r \\in [0,1]_R\\\\}.
+=\\{([0,r^*(q)],[q,1]) : q \\in [0,1]_Q\\}
+=\\{([0,r],[q^*(r),1]) : r \\in [0,1]_R\\}.
 $$
 
 Equivalently, we may parameterize nucleus pairs just by their extremal points:
