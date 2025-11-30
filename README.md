@@ -1,13 +1,15 @@
 # Quote Request Booking — Order-Theoretic Notes
 
-This repo contains a single write-up, `booking_probability.md`, that rephrases container-shipping quote acceptance/rejection in terms of total orders and quantile embeddings. It also includes supporting figures in `figures/`.
+This repo contains a single write-up in both Markdown and LaTeX form that rephrases container-shipping quote acceptance/rejection in terms of total orders and quantile embeddings, plus supporting figures in `figures/`.
 
 ## Contents
-- `booking_probability.md` — main document explaining market and carrier quantile mappings, feasibility relations, rejection/booking curves, and SSR context.
+- `booking_probability.md` — main Markdown document explaining market and carrier quantile mappings, feasibility relations, rejection/booking curves, and SSR context.
+- `booking_probability.tex` — LaTeX export of the same content (kept in sync with the Markdown).
 - `figures/` — diagrams for market feasibility, carrier subset embedding, carrier feasibility, and willingness-to-pay geometry.
 
 ## How to view
 - Open `booking_probability.md` directly in your editor or render it in any Markdown viewer.
+- Or compile `booking_probability.tex` with your LaTeX toolchain (e.g., `pdflatex booking_probability.tex`) to produce a PDF.
 
 ## Editing tips
 - Keep formulas in quantile coordinates after section 4.
