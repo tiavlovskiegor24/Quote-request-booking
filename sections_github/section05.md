@@ -79,7 +79,7 @@ $$
 of pairs $(A,B)$ of rate‑ and request‑quantile sets defined by
 
 $$
-\\mathrm{Nuc}(F) = \\\\{(A,B) : A = F^\\sharp(B),\\\\; B = F_\\flat(A)\\\\},
+\\mathrm{Nuc}(F) = \\{(A,B) : A = F^\\sharp(B),\\; B = F_\\flat(A)\\},
 $$
 
 with $A \\subseteq [0,1]_R$ a set of rate quantiles and $B \\subseteq [0,1]_Q$ a set of request quantiles. Such pairs are “as tight as possible” with respect to $F$: $A$ is exactly the set of rates supported by $B$, and $B$ is exactly the set of requests supporting $A$.
