@@ -11,10 +11,6 @@ This repo contains a single write-up in both Markdown and LaTeX form that rephra
 - Open `booking_probability.md` directly in your editor or render it in any Markdown viewer.
 - Or compile `booking_probability.tex` with your LaTeX toolchain (e.g., `pdflatex booking_probability.tex`) to produce a PDF.
 
-## Editing tips
-- Keep formulas in quantile coordinates after section 4.
-- Reference figures with relative paths (e.g., `figures/market_feasibility_relation.jpg`).
-
 ## TODO
 1. Relate the expected rejection probability to survival analysis.
 2. Finish off the statistical estimation of the booking curve (current section 9).
