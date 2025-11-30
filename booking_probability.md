@@ -93,18 +93,24 @@ $$
 = \frac{|\{q' \in Q : q' \le q\}|-1}{|Q|-1}.
 $$
 
+This map is monotone and bijective onto its image, so it is an order‑isomorphism:
+$$
+Q \cong [0,1]_Q.
+$$
+$$
+[0,1]_Q := \mathrm{im}(\phi_Q) \subseteq [0,1].
+$$
+We will freely identify elements of $Q$ with their images in $[0,1]_Q$ and read $\phi_Q(q)$ as the standardized rank of $q$ on the $[0,1]$ scale.
+
 ![Quantile embedding of a finite totally ordered set $Q$ into $[0,1]$](figures/quantile_embedding.jpg)
 
-A more explicit form of that embedding:
-Begin with the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$.
-
-Curry it in the first argument: fix $q$ and read $\mathrm{hom}_Q(-,q) : Q \to \mathbf{Bool}$ as an ordinary function. This is the indicator (1 if an element is in a set, 0 otherwise) of the principal down-set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with
+A more explicit construction starts from the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$. Currying in the first argument, and fixing $q$, we read $\mathrm{hom}_Q(-,q) : Q \to \mathbf{Bool}$ as an ordinary function. This is the indicator (1 if an element is in a set, 0 otherwise) of the principal down‑set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with
 
 $$
 \chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q).
 $$
 
-Average those indicators uniformly over all $q' \in Q$: sum the Boolean values (1 when $q' \le q$, 0 otherwise) and divide by $|Q|$. This produces a cumulative rank; we then rescale it so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
+Averaging those indicators uniformly over all $q' \in Q$—summing the Boolean values (1 when $q' \le q$, 0 otherwise) and dividing by $|Q|$—produces a cumulative rank. We then rescale so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
 
 $$
 \phi_Q(q)
@@ -295,8 +301,7 @@ $$
 - Points on the diagonal where $r=r^*(q)$ and $q=q^*(r)$ are fixed by these mappings; these diagonal points are exactly the elements of $\mathrm{Nuc}(F)_{\mathrm{ext}}$.
 - The figure thus shows how the nucleus picks out a one‑dimensional set of extremal points while arbitrary $(r,q)$ pairs are mapped onto this WTP/rejection correspondence.
 
-<!-- TODO make the below a separate section -->
-### Adjoint scalar maps, WTP, and rejection
+## 6. Adjoint scalar maps, WTP, and rejection
 
 The scalar maps $r^*$ and $q^*$ summarize the nucleus at the level of individual quantiles.
 
@@ -712,5 +717,3 @@ This framework generalizes to multidimensional request spaces and non-total orde
 ---
 
 -->
-
-
