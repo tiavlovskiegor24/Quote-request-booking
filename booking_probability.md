@@ -104,24 +104,6 @@ We will freely identify elements of $Q$ with their images in $[0,1]_Q$ and read 
 
 ![Quantile embedding of a finite totally ordered set $Q$ into $[0,1]$](figures/quantile_embedding.jpg)
 
-A more explicit construction starts from the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$. Currying in the first argument, and fixing $q$, we read $\mathrm{hom}_Q(-,q) : Q \to \mathbf{Bool}$ as an ordinary function. This is the indicator (1 if an element is in a set, 0 otherwise) of the principal down‑set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with
-
-$$
-\chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q).
-$$
-
-Averaging those indicators uniformly over all $q' \in Q$—summing the Boolean values (1 when $q' \le q$, 0 otherwise) and dividing by $|Q|$—produces a cumulative rank. We then rescale so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
-
-$$
-\phi_Q(q)
-= \frac{1}{|Q|-1}
-\sum_{q' \in Q} \chi_{\downarrow q}(q') - \frac{1}{|Q|-1}
-= \frac{1}{|Q|-1}
-\sum_{q' \in Q} \mathrm{hom}_Q(q',q) - \frac{1}{|Q|-1}.
-$$
-
-Here the sum counts how many elements lie in $\downarrow q$: each indicator contributes 1 when $q'$ is below $q$ and 0 otherwise. Subtracting $1$ and dividing by $|Q|-1$ linearly rescales this cumulative rank so that the minimum element of $Q$ gets value $0$ and the maximum gets value $1$.
-
 ### Request quantiles
 Applied to market requests (take $Q = Q_{\text{market}}$):
 
@@ -703,17 +685,37 @@ Each produces a different estimator $\widehat{\rho}_{\text{carrier}}(r)=1-\wideh
 
 
 ## 11. Closing Thoughts
-
+	
 Under the total-order assumption:
-
+	
 - accept/reject = comparing quantiles  
 - WTP = maximum feasible rate  
 - carrier demand = market subset  
 - carrier rejection curve = head probability (booking is its complement)  
 - **SSR = a chosen point balancing rate and rejection**
-
+	
 This framework generalizes to multidimensional request spaces and non-total orders.
-
+	
 ---
-
+	
 -->
+
+## Appendix A: Explicit Construction of the Quantile Embedding
+
+A more explicit construction starts from the canonical feasibility relation $\mathrm{hom}_Q : Q^{op}\times Q \to \mathbf{Bool}$, which just records the order: $\mathrm{hom}_Q(q',q) = \mathbf{true}$ exactly when $q'\le q$. Currying in the first argument, and fixing $q$, we read $\mathrm{hom}_Q(-,q) : Q \to \mathbf{Bool}$ as an ordinary function. This is the indicator (1 if an element is in a set, 0 otherwise) of the principal down‑set $\downarrow q$ (all elements $\le q$), written $\chi_{\downarrow q} : Q \to \mathbf{Bool}$ with
+
+$$
+\chi_{\downarrow q}(q') = \mathrm{hom}_Q(q',q).
+$$
+
+Averaging those indicators uniformly over all $q' \in Q$—summing the Boolean values (1 when $q' \le q$, 0 otherwise) and dividing by $|Q|$—produces a cumulative rank. We then rescale so that the minimum of $Q$ maps to $0$ and the maximum to $1$, with equal steps in between. This is the same averaging/rescaling used later when integrating feasibility relations in section 9.2. In terms of the embedding $\phi_Q$ defined above, this is
+
+$$
+\phi_Q(q)
+= \frac{1}{|Q|-1}
+\sum_{q' \in Q} \chi_{\downarrow q}(q') - \frac{1}{|Q|-1}
+= \frac{1}{|Q|-1}
+\sum_{q' \in Q} \mathrm{hom}_Q(q',q) - \frac{1}{|Q|-1}.
+$$
+
+Here the sum counts how many elements lie in $\downarrow q$: each indicator contributes 1 when $q'$ is below $q$ and 0 otherwise. Subtracting $1$ and dividing by $|Q|-1$ linearly rescales this cumulative rank so that the minimum element of $Q$ gets value $0$ and the maximum gets value $1$.
